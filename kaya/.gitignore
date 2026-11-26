@@ -228,3 +228,6 @@ data/
 ui/node_modules/
 .pytest_cache/
 *.db
+
+# the prebuilt UI must ship with the repo (the template rule above ignores any dist/)
+!ui/dist/

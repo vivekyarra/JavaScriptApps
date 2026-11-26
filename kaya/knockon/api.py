@@ -12,6 +12,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 from . import core
 from .schemas import CaseInput, DocumentInput
@@ -175,6 +176,36 @@ def get_case(case_id: str) -> Any:
         raise HTTPException(404, "no decision for this case yet")
     latest["history"] = st.history(case_id)
     return {"decision": latest, "history": st.history(case_id), "document_revisions": st.document_revisions(case_id)}
+
+
+class ClarificationUpdate(BaseModel):
+    question: str
+    party: str
+    sent: bool
+
+
+@app.get("/api/cases/{case_id}/clarifications")
+def get_clarifications(case_id: str) -> Any:
+    """The clarification queue of the latest decision, with the saved sent/not-sent state of each question."""
+    st = core.get_store()
+    latest = st.latest_decision(case_id)
+    if latest is None:
+        raise HTTPException(404, "no decision for this case yet")
+    state = st.clarification_state(case_id)
+    out = []
+    for party, key in (("Vendor", "vendor_questions"), ("Engineer of record", "engineer_questions"), ("Readable copy", "readable_copy_requests")):
+        for q in latest.get(key, []):
+            k = st.question_key(q)
+            out.append({"qkey": k, "party": party, "question": q, "sent": state.get(k, False)})
+    return out
+
+
+@app.post("/api/cases/{case_id}/clarifications")
+def update_clarification(case_id: str, body: ClarificationUpdate) -> Any:
+    st = core.get_store()
+    if not st.case_exists(case_id):
+        raise HTTPException(404, "unknown case")
+    return st.set_clarification(case_id, body.question, body.party, body.sent)
 
 
 @app.get("/api/cases/{case_id}/versions/{version}")

@@ -1,0 +1,403 @@
+{
+  "$defs": {
+    "Difference": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "changed_vs_original",
+            "deviates_from_spec"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "from_value": {
+          "default": null,
+          "title": "From Value"
+        },
+        "to_value": {
+          "default": null,
+          "title": "To Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "label",
+        "kind"
+      ],
+      "title": "Difference",
+      "type": "object"
+    },
+    "DocumentRef": {
+      "properties": {
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "pages": {
+          "title": "Pages",
+          "type": "integer"
+        },
+        "unreadable_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Unreadable Pages",
+          "type": "array"
+        },
+        "kind": {
+          "default": "pdf",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "name",
+        "sha256",
+        "pages"
+      ],
+      "title": "DocumentRef",
+      "type": "object"
+    },
+    "Evidence": {
+      "description": "A resolvable pointer to the exact place a value came from.",
+      "properties": {
+        "document": {
+          "title": "Document",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "default": true,
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document",
+        "role",
+        "sha256",
+        "page",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "FieldComparison": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/$defs/FieldValue"
+        },
+        "original": {
+          "$ref": "#/$defs/FieldValue"
+        },
+        "alternate": {
+          "$ref": "#/$defs/FieldValue"
+        },
+        "changed_vs_original": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Changed Vs Original"
+        },
+        "deviates_from_spec": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deviates From Spec"
+        }
+      },
+      "required": [
+        "field",
+        "label",
+        "spec",
+        "original",
+        "alternate"
+      ],
+      "title": "FieldComparison",
+      "type": "object"
+    },
+    "FieldValue": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "documented",
+            "not_stated",
+            "could_not_read",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "qualifier": {
+          "anyOf": [
+            {
+              "enum": [
+                "min",
+                "max",
+                "nominal"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qualifier"
+        },
+        "detail": {
+          "default": null,
+          "title": "Detail"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "unreadable_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Unreadable Pages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "status"
+      ],
+      "title": "FieldValue",
+      "type": "object"
+    },
+    "SupplierGap": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "documented",
+            "not_stated",
+            "could_not_read",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "unreadable_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Unreadable Pages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "label",
+        "status",
+        "reason"
+      ],
+      "title": "SupplierGap",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Case Id"
+    },
+    "equipment_type": {
+      "title": "Equipment Type",
+      "type": "string"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentRef"
+      },
+      "title": "Documents",
+      "type": "array"
+    },
+    "fields": {
+      "items": {
+        "$ref": "#/$defs/FieldComparison"
+      },
+      "title": "Fields",
+      "type": "array"
+    },
+    "differences": {
+      "items": {
+        "$ref": "#/$defs/Difference"
+      },
+      "title": "Differences",
+      "type": "array"
+    },
+    "supplier_gaps": {
+      "items": {
+        "$ref": "#/$defs/SupplierGap"
+      },
+      "title": "Supplier Gaps",
+      "type": "array"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "equipment_type",
+    "documents",
+    "fields",
+    "differences",
+    "supplier_gaps",
+    "summary"
+  ],
+  "title": "CompareResult",
+  "type": "object"
+}

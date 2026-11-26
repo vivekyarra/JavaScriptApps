@@ -1,0 +1,735 @@
+{
+  "$defs": {
+    "CostItem": {
+      "properties": {
+        "item": {
+          "title": "Item",
+          "type": "string"
+        },
+        "amount": {
+          "title": "Amount",
+          "type": "number"
+        },
+        "currency": {
+          "title": "Currency",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item",
+        "amount",
+        "currency",
+        "source"
+      ],
+      "title": "CostItem",
+      "type": "object"
+    },
+    "DecisionDiff": {
+      "properties": {
+        "from_version": {
+          "title": "From Version",
+          "type": "integer"
+        },
+        "to_version": {
+          "title": "To Version",
+          "type": "integer"
+        },
+        "changed": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Changed",
+          "type": "array"
+        },
+        "still_open": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Still Open",
+          "type": "array"
+        },
+        "unchanged_settled": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unchanged Settled",
+          "type": "array"
+        },
+        "new": {
+          "items": {
+            "type": "string"
+          },
+          "title": "New",
+          "type": "array"
+        },
+        "removed": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Removed",
+          "type": "array"
+        },
+        "milestone_moved": {
+          "default": false,
+          "title": "Milestone Moved",
+          "type": "boolean"
+        },
+        "answer_before": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Answer Before"
+        },
+        "answer_after": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Answer After"
+        },
+        "max_recoverable_before": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Recoverable Before"
+        },
+        "max_recoverable_after": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Recoverable After"
+        }
+      },
+      "required": [
+        "from_version",
+        "to_version"
+      ],
+      "title": "DecisionDiff",
+      "type": "object"
+    },
+    "DocumentRef": {
+      "properties": {
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "pages": {
+          "title": "Pages",
+          "type": "integer"
+        },
+        "unreadable_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Unreadable Pages",
+          "type": "array"
+        },
+        "kind": {
+          "default": "pdf",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "name",
+        "sha256",
+        "pages"
+      ],
+      "title": "DocumentRef",
+      "type": "object"
+    },
+    "Evidence": {
+      "description": "A resolvable pointer to the exact place a value came from.",
+      "properties": {
+        "document": {
+          "title": "Document",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "default": true,
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document",
+        "role",
+        "sha256",
+        "page",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Finding": {
+      "properties": {
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "topic": {
+          "enum": [
+            "physical",
+            "electrical",
+            "specification",
+            "schedule"
+          ],
+          "title": "Topic",
+          "type": "string"
+        },
+        "label": {
+          "enum": [
+            "conclusive",
+            "cleared",
+            "needs_engineer",
+            "not_stated",
+            "could_not_read"
+          ],
+          "title": "Label",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "constraint": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Constraint"
+        },
+        "requirement_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Requirement Evidence",
+          "type": "array"
+        },
+        "supplier_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Supplier Evidence",
+          "type": "array"
+        },
+        "formula": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formula"
+        },
+        "computed": {
+          "additionalProperties": true,
+          "title": "Computed",
+          "type": "object"
+        },
+        "scope_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope Note"
+        },
+        "follow_up": {
+          "$ref": "#/$defs/FollowUp"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "key",
+        "topic",
+        "label",
+        "title",
+        "summary"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "FollowUp": {
+      "properties": {
+        "kind": {
+          "enum": [
+            "vendor",
+            "engineer",
+            "readable_copy",
+            "route",
+            "none"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "FollowUp",
+      "type": "object"
+    },
+    "MilestoneResult": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "baseline_week": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Baseline Week"
+        },
+        "alternate_week_best": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alternate Week Best"
+        },
+        "alternate_week_conservative": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Alternate Week Conservative"
+        },
+        "max_recoverable_weeks": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Recoverable Weeks"
+        },
+        "conservative_recoverable_weeks": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conservative Recoverable Weeks"
+        },
+        "weeks_earlier_alternate_ships": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weeks Earlier Alternate Ships"
+        },
+        "controlling_item_baseline": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlling Item Baseline"
+        },
+        "controlling_item_alternate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlling Item Alternate"
+        },
+        "install_test_weeks": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Install Test Weeks"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "MilestoneResult",
+      "type": "object"
+    },
+    "Requirement": {
+      "properties": {
+        "item": {
+          "title": "Item",
+          "type": "string"
+        },
+        "currently_week": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currently Week"
+        },
+        "must_be_ready_by_week": {
+          "title": "Must Be Ready By Week",
+          "type": "number"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        }
+      },
+      "required": [
+        "item",
+        "must_be_ready_by_week"
+      ],
+      "title": "Requirement",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "integer"
+    },
+    "inputs_hash": {
+      "title": "Inputs Hash",
+      "type": "string"
+    },
+    "target_weeks": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Target Weeks"
+    },
+    "answer": {
+      "enum": [
+        "yes",
+        "only_if",
+        "no_not_alone",
+        "no",
+        "needs_data",
+        "no_target"
+      ],
+      "title": "Answer",
+      "type": "string"
+    },
+    "headline": {
+      "title": "Headline",
+      "type": "string"
+    },
+    "milestone": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MilestoneResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "conditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Conditions",
+      "type": "array"
+    },
+    "requirements_to_hit_target": {
+      "items": {
+        "$ref": "#/$defs/Requirement"
+      },
+      "title": "Requirements To Hit Target",
+      "type": "array"
+    },
+    "next_call": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Call"
+    },
+    "settled": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Settled",
+      "type": "array"
+    },
+    "open": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Open",
+      "type": "array"
+    },
+    "costs": {
+      "items": {
+        "$ref": "#/$defs/CostItem"
+      },
+      "title": "Costs",
+      "type": "array"
+    },
+    "cost_note": {
+      "default": "",
+      "title": "Cost Note",
+      "type": "string"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "vendor_questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Vendor Questions",
+      "type": "array"
+    },
+    "engineer_questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Engineer Questions",
+      "type": "array"
+    },
+    "readable_copy_requests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Readable Copy Requests",
+      "type": "array"
+    },
+    "missing_project_facts": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Project Facts",
+      "type": "array"
+    },
+    "confidence": {
+      "default": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentRef"
+      },
+      "title": "Documents",
+      "type": "array"
+    },
+    "diff": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DecisionDiff"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "history": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "History",
+      "type": "array"
+    },
+    "notice": {
+      "default": "Pre-screen only. KNOCK-ON does not approve engineering; open items go to the vendor or the engineer of record.",
+      "title": "Notice",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "version",
+    "inputs_hash",
+    "answer",
+    "headline"
+  ],
+  "title": "DecisionResult",
+  "type": "object"
+}

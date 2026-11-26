@@ -32,6 +32,15 @@ CREATE TABLE IF NOT EXISTS documents (
   raw_b64 TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_documents_case ON documents(case_id, role, seq);
+CREATE TABLE IF NOT EXISTS clarifications (
+  case_id TEXT NOT NULL,
+  qkey TEXT NOT NULL,
+  question TEXT NOT NULL,
+  party TEXT NOT NULL,
+  sent INTEGER NOT NULL DEFAULT 0,
+  updated TEXT NOT NULL,
+  PRIMARY KEY (case_id, qkey)
+);
 CREATE TABLE IF NOT EXISTS decisions (
   case_id TEXT NOT NULL,
   version INTEGER NOT NULL,
@@ -160,6 +169,28 @@ class Store:
             if p.number == page:
                 return {"document": doc.name, "role": doc.role, "page": p.number, "status": p.status, "reason": p.reason, "text": p.text}
         return None
+
+    # ---------------------------------------------------------- clarifications
+    @staticmethod
+    def question_key(question: str) -> str:
+        import hashlib
+
+        return hashlib.sha1(question.strip().encode("utf-8")).hexdigest()[:16]  # noqa: S324 - not security relevant
+
+    def set_clarification(self, case_id: str, question: str, party: str, sent: bool) -> dict[str, Any]:
+        key = self.question_key(question)
+        with self._conn() as c:
+            c.execute(
+                "INSERT INTO clarifications(case_id, qkey, question, party, sent, updated) VALUES (?,?,?,?,?,?) "
+                "ON CONFLICT(case_id, qkey) DO UPDATE SET sent=excluded.sent, updated=excluded.updated",
+                (case_id, key, question, party, 1 if sent else 0, _now()),
+            )
+        return {"qkey": key, "question": question, "party": party, "sent": sent}
+
+    def clarification_state(self, case_id: str) -> dict[str, bool]:
+        with self._conn() as c:
+            rows = c.execute("SELECT qkey, sent FROM clarifications WHERE case_id=?", (case_id,)).fetchall()
+        return {r["qkey"]: bool(r["sent"]) for r in rows}
 
     # -------------------------------------------------------------- decisions
     def latest_decision(self, case_id: str) -> Optional[dict[str, Any]]:

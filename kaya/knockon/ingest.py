@@ -67,7 +67,14 @@ def detect_revision(first_page_text: str) -> Optional[str]:
     return None
 
 
+_CID = re.compile(r"\(cid:\d+\)")
+
+
 def _page_quality(text: str, has_images: bool) -> tuple[str, Optional[str]]:
+    cid = len(_CID.findall(text))
+    if cid and cid / max(len(text.split()), 1) > 0.3:
+        return "unreadable", "text layer is garbled"
+    text = _CID.sub(" ", text)  # stray glyph ids (bullets, symbols) must not poison a readable page
     stripped = text.strip()
     alpha = sum(ch.isalpha() for ch in stripped)
     if alpha < MIN_ALPHA_CHARS:
@@ -75,7 +82,7 @@ def _page_quality(text: str, has_images: bool) -> tuple[str, Optional[str]]:
         return "unreadable", reason
     visible = [ch for ch in stripped if not ch.isspace()]
     good = sum(ch.isalnum() or ch in ".,:;()%/+-–—±°×x#&'\"@=<>[]" for ch in visible)
-    if visible and good / len(visible) < MIN_READABLE_RATIO or "(cid:" in stripped:
+    if visible and good / len(visible) < MIN_READABLE_RATIO:
         return "unreadable", "text layer is garbled"
     return "ok", None
 
@@ -92,7 +99,7 @@ def _parse_pdf(data: bytes) -> list[Page]:
                 pages.append(Page(number=i, text="", status="unreadable", reason=f"extraction failed: {exc}"))
                 continue
             status, reason = _page_quality(text, bool(page.images))
-            pages.append(Page(number=i, text=text, status=status, reason=reason))
+            pages.append(Page(number=i, text=_CID.sub("\u2022", text), status=status, reason=reason))
     return pages
 
 

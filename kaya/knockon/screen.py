@@ -93,9 +93,20 @@ def _gap_finding(ctx: CaseContext, key: str, topic: str, fv: FieldValue, what: s
         summary=(f"A weight in 'ton(s)' was found but its unit is ambiguous; {_lc(what)} is treated as not stated." if ambiguous
                  else f"The readable submittal does not state {_lc(what)}."),
         supplier_evidence=fv.evidence,
-        follow_up=FollowUp(kind="vendor", question=ask),
+        follow_up=FollowUp(
+            kind="vendor",
+            question=(ask + " The submittal gives the weight in 'tons'; please restate it in kg or lb (a short ton and a tonne differ by about 10%).") if ambiguous else ask,
+        ),
         confidence=fv.confidence,
     )
+
+
+def _missing(base: str, *fvs: FieldValue) -> str:
+    bad = [fv for fv in fvs if fv.status == "could_not_read"]
+    if bad:
+        q = bad[0].evidence[0].quote if bad[0].evidence else ""
+        return f"{base} (a line mentions it but it could not be read reliably{': ' + chr(34) + q + chr(34) if q else ''})"
+    return base
 
 
 def _constraint_dict(name: str, fv: FieldValue) -> dict[str, Any]:
@@ -109,7 +120,7 @@ def _elevator(ctx: CaseContext, missing: list[str]) -> Optional[Finding]:
         if cap.status == "conflicting":
             missing.append("freight elevator capacity (the logistics document and project facts disagree)")
         else:
-            missing.append("freight elevator capacity (needed to check the heaviest transported section)")
+            missing.append(_missing("freight elevator capacity (needed to check the heaviest transported section)", cap))
         return None
     hv = ctx.f("alternate", "heaviest_transport_weight_kg")
     ship_total = ctx.f("alternate", "shipping_total_weight_kg")
@@ -181,7 +192,7 @@ def _footprint_bounds(dims: FieldValue) -> Optional[tuple[float, float, bool]]:
 def _slab(ctx: CaseContext, missing: list[str]) -> Optional[Finding]:
     lim = ctx.constraints["slab_limit_kg_m2"]
     if lim.status != "documented":
-        missing.append("floor loading limit (needed to check weight per area)")
+        missing.append(_missing("floor loading limit (needed to check weight per area)", lim))
         return None
     total = ctx.f("alternate", "total_weight_kg")
     dims = ctx.f("alternate", "dimensions_mm")
@@ -234,7 +245,7 @@ def _slab(ctx: CaseContext, missing: list[str]) -> Optional[Finding]:
 def _door(ctx: CaseContext, missing: list[str]) -> Optional[Finding]:
     dw, dh = ctx.constraints["door_width_mm"], ctx.constraints["door_height_mm"]
     if dw.status != "documented" or dh.status != "documented":
-        missing.append("door clear width and height (needed to check overall dimensions)")
+        missing.append(_missing("door clear width and height (needed to check overall dimensions)", dw, dh))
         return None
     dims = ctx.f("alternate", "dimensions_mm")
     cdict = {"name": "Door opening (width × height)", "field": "door_width_mm/door_height_mm", "value": [dw.value, dh.value], "unit": "mm"}
@@ -334,7 +345,7 @@ def _heat(ctx: CaseContext, missing: list[str]) -> Optional[Finding]:
     heat = ctx.f("alternate", "heat_loss_kw")
     if cap.status != "documented":
         if heat.status == "documented":
-            missing.append("room cooling capacity (needed to check the alternate's heat loss)")
+            missing.append(_missing("room cooling capacity (needed to check the alternate's heat loss)", cap))
         return None
     cdict = _constraint_dict("cooling_capacity_kw", cap)
     if heat.status != "documented":

@@ -131,6 +131,29 @@ def score_revision(dec2: Any, labels: dict[str, Any]) -> Optional[dict[str, Any]
     return {"checks": checks, "passed": sum(checks.values()), "total": len(checks)}
 
 
+FROZEN_COMMIT = "b1a83d3"
+FROZEN_FILES = ["knockon/extract.py", "knockon/units.py", "knockon/ingest.py", "knockon/screen.py", "knockon/compare.py", "knockon/decide.py", "knockon/context.py"]
+
+
+def freeze_status() -> dict[str, Any]:
+    """Prove the extraction and decision code is byte-identical to the frozen commit before the final run."""
+    import hashlib
+    import subprocess
+
+    out: dict[str, Any] = {"frozen_commit": FROZEN_COMMIT, "files_unchanged": {}}
+    try:
+        for f in FROZEN_FILES:
+            frozen = subprocess.run(["git", "show", f"{FROZEN_COMMIT}:{f}"], cwd=ROOT, capture_output=True, check=True).stdout
+            current = (ROOT / f).read_bytes()
+            out["files_unchanged"][f] = hashlib.sha256(frozen).hexdigest() == hashlib.sha256(current).hexdigest()
+        out["all_unchanged"] = all(out["files_unchanged"].values())
+        out["head"] = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    except Exception as exc:  # git unavailable: say so rather than claim a freeze
+        out["all_unchanged"] = None
+        out["error"] = str(exc)
+    return out
+
+
 def run_package(pkg: Path) -> dict[str, Any]:
     labels = json.loads((pkg / "labels.json").read_text(encoding="utf-8"))
     manifest, _ = load_manifest(str(pkg))
@@ -253,6 +276,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     summary = summarise(results)
     print_report(args.set, results, summary)
     payload = {"set": args.set, "summary": summary, "results": results}
+    if args.set == "final":
+        payload["freeze"] = freeze_status()
     for r in payload["results"]:
         r["fields"].pop("calib", None)
     target = args.out

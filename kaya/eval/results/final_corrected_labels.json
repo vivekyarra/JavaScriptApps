@@ -1,0 +1,441 @@
+{
+  "set": "final",
+  "summary": {
+    "packages": 4,
+    "fields_correct": "128/144",
+    "read_status_calls_correct": "128/144",
+    "findings_correct": "7/16",
+    "false_positive_findings": 6,
+    "electrical_clearances_issued": 0,
+    "decision_checks_passed": "14/19",
+    "revision_checks_passed": "2/2",
+    "calibration": [
+      {
+        "confidence": ">=0.8",
+        "n": 85,
+        "correct": 84,
+        "accuracy": 0.988
+      }
+    ],
+    "mean_runtime_s": 0.145
+  },
+  "results": [
+    {
+      "package": "f-01-quayside",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 34,
+        "status_total": 36,
+        "status_correct": 34,
+        "misses": [
+          {
+            "role": "alternate",
+            "field": "impedance_pct",
+            "expected": {
+              "status": "documented",
+              "value": 5.75
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "heat_loss_kw",
+            "expected": {
+              "status": "documented",
+              "value": 13.8
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          }
+        ]
+      },
+      "findings": {
+        "expected": 6,
+        "correct": 4,
+        "false_positive_findings": [
+          "electrical:impedance"
+        ],
+        "wrong": [
+          {
+            "key": "dims:door",
+            "expected": "conclusive",
+            "got": null
+          },
+          {
+            "key": "heat:cooling",
+            "expected": "cleared",
+            "got": null
+          }
+        ],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.095,
+        "screen": 0.044,
+        "decide": 0.045
+      },
+      "answer": "only_if",
+      "headline": "Only if the conclusive deviation is resolved and the open items are resolved without adding time (Impedance (%Z): could not read). The most this swap can recover is 12 weeks against a 8-week target."
+    },
+    {
+      "package": "f-02-eastgate",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 34,
+        "status_total": 36,
+        "status_correct": 34,
+        "misses": [
+          {
+            "role": "alternate",
+            "field": "impedance_pct",
+            "expected": {
+              "status": "conflicting"
+            },
+            "got": {
+              "status": "documented",
+              "value": 6.5
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "dimensions_mm",
+            "expected": {
+              "status": "documented",
+              "value": [
+                1600,
+                2200,
+                2300
+              ]
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          }
+        ]
+      },
+      "findings": {
+        "expected": 5,
+        "correct": 2,
+        "false_positive_findings": [],
+        "wrong": [
+          {
+            "key": "weight:slab",
+            "expected": "cleared",
+            "got": "could_not_read"
+          },
+          {
+            "key": "dims:door",
+            "expected": "cleared",
+            "got": "could_not_read"
+          },
+          {
+            "key": "electrical:impedance",
+            "expected": "not_stated",
+            "got": "needs_engineer"
+          }
+        ],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.045,
+        "screen": 0.051,
+        "decide": 0.044
+      },
+      "answer": "no_not_alone",
+      "headline": "No, not from the transformer swap alone. The alternate ships 40 weeks earlier, but Main switchgear is still due in week 64. Against the week-64 baseline, the most this swap can recover is 0 weeks, assuming installation and testing durations are unchanged. To recover 3 weeks, Main switchgear must also be ready by week 61."
+    },
+    {
+      "package": "f-03-northfield",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 24,
+        "status_total": 36,
+        "status_correct": 24,
+        "misses": [
+          {
+            "role": "alternate",
+            "field": "rated_kva",
+            "expected": {
+              "status": "documented",
+              "value": 2000
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "primary_voltage_v",
+            "expected": {
+              "status": "documented",
+              "value": 12470
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "secondary_voltage_v",
+            "expected": {
+              "status": "documented",
+              "value": 480
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "impedance_pct",
+            "expected": {
+              "status": "documented",
+              "value": 5.75
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "winding_config",
+            "expected": {
+              "status": "documented",
+              "value": "delta-wye"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "dimensions_mm",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "heaviest_transport_weight_kg",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "shipping_total_weight_kg",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "total_weight_kg",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "heat_loss_kw",
+            "expected": {
+              "status": "documented",
+              "value": 12.309
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "lead_time_weeks",
+            "expected": {
+              "status": "documented",
+              "value": 30.333
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "lead_time_start",
+            "expected": {
+              "status": "documented",
+              "value": "order"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          }
+        ]
+      },
+      "findings": {
+        "expected": 4,
+        "correct": 0,
+        "false_positive_findings": [
+          "electrical:impedance",
+          "spec:kva",
+          "spec:primary_voltage",
+          "spec:secondary_voltage",
+          "spec:winding"
+        ],
+        "wrong": [
+          {
+            "key": "weight:elevator",
+            "expected": "not_stated",
+            "got": null
+          },
+          {
+            "key": "weight:slab",
+            "expected": "not_stated",
+            "got": null
+          },
+          {
+            "key": "dims:ceiling",
+            "expected": "not_stated",
+            "got": null
+          },
+          {
+            "key": "heat:cooling",
+            "expected": "cleared",
+            "got": null
+          }
+        ],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": false,
+          "baseline_week": false,
+          "max_recoverable_weeks": false,
+          "weeks_earlier_alternate_ships": false,
+          "controlling_item_alternate": false,
+          "requirements": true
+        },
+        "passed": 1,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.06,
+        "screen": 0.039,
+        "decide": 0.039
+      },
+      "answer": "needs_data",
+      "headline": "Cannot say how many weeks this swap recovers. The alternate's quoted lead time could not be read."
+    },
+    {
+      "package": "f-04-southport",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 36,
+        "status_total": 36,
+        "status_correct": 36,
+        "misses": []
+      },
+      "findings": {
+        "expected": 1,
+        "correct": 1,
+        "false_positive_findings": [],
+        "wrong": [],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true
+        },
+        "passed": 1,
+        "total": 1
+      },
+      "runtime_s": {
+        "compare": 0.042,
+        "screen": 0.042,
+        "decide": 0.035
+      },
+      "answer": "needs_data",
+      "headline": "Milestone dates and controlling items are needed to say how many weeks this swap can recover. Provide the baseline arrival week of the substituted item and the arrival weeks of the other items the milestone depends on.",
+      "revision_runtime_s": 0.047,
+      "revision": {
+        "checks": {
+          "removed:electrical:impedance": true,
+          "answer_after": true
+        },
+        "passed": 2,
+        "total": 2
+      },
+      "revision_headline": "Milestone dates and controlling items are needed to say how many weeks this swap can recover. Provide the baseline arrival week of the substituted item and the arrival weeks of the other items the milestone depends on."
+    }
+  ],
+  "freeze": {
+    "frozen_commit": "b1a83d3",
+    "files_unchanged": {
+      "knockon/extract.py": true,
+      "knockon/units.py": true,
+      "knockon/ingest.py": true,
+      "knockon/screen.py": true,
+      "knockon/compare.py": true,
+      "knockon/decide.py": true,
+      "knockon/context.py": true
+    },
+    "all_unchanged": true,
+    "head": "b1a83d3"
+  }
+}

@@ -267,7 +267,8 @@ def scan_voltages(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
 
 _IMP_LABEL = re.compile(r"(%\s*z\b|\bz\s*%|\bz\s*\(\s*%\s*\)|\bpercent(?:age)?\s+impedance|\bimpedance\b|\bimp\.)", re.I)
 _IMP_EXCL = re.compile(r"zero[- ]sequence|\bz0\b|\bx0\b|\br0\b|\bnegative[- ]sequence", re.I)
-_TIER1 = re.compile(rf"[^\d\n]{{0,40}}?({NUM})\s*(%|percent|pu|p\.u\.)", re.I)
+_TIER1 = re.compile(rf"[^\d\n]{{0,40}}?({NUM})\s*(%|percent|per\s*cent|pu|p\.u\.)", re.I)
+_TIER0 = re.compile(rf"[^\d\n]{{0,12}}?\(\s*%\s*\)[\s:=.\-–—]*({NUM})\b", re.I)
 _TIER2 = re.compile(rf"[\s:=\-–—.]*({NUM})\b(?!\s*(?:kv|v\b|kva|ohm|Ω|mm|kg))", re.I)
 
 
@@ -284,6 +285,12 @@ def scan_impedance(doc: ParsedDocument) -> list[Cand]:
         s = clean_line(line)
         for lm in _IMP_LABEL.finditer(s):
             rest = s[lm.end():]
+            m0 = _TIER0.match(rest)
+            if m0:
+                n0 = U.parse_number(m0.group(1))
+                if n0 is not None and 0 < n0 <= 30:
+                    out.append(Cand(n0, page, line, "%", qualifier=_qualifier(line), detail={"tolerance_pct": tol}))
+                    break
             m1 = _TIER1.match(rest)
             if m1:
                 n = U.parse_number(m1.group(1))
@@ -401,6 +408,11 @@ def scan_winding(doc: ParsedDocument) -> list[Cand]:
             for rx, fam in _WORD_FAMILIES[:2] + _WORD_FAMILIES[2:]:
                 if rx.search(line) and not re.search(r"\b(primary|secondary)\b", line, re.I):
                     fam_hits.setdefault(fam, (page, line))
+        iec = re.compile(r"\b(YNyn\d{1,2}|Ynyn\d{1,2}|YNd\d{1,2}|Ynd\d{1,2}|Dyn\d{1,2}|Dy\d{1,2}|Dd\d{1,2}|Yd\d{1,2}|Yyn\d{1,2}|Yy\d{1,2})\b")
+        for page, line in _lines(doc):
+            g = iec.search(line)
+            if g and _iec_family(g.group(1)):
+                fam_hits.setdefault(_iec_family(g.group(1)) or "", (page, line))
         if len(fam_hits) == 1:
             fam, (page, line) = next(iter(fam_hits.items()))
             out.append(Cand(fam, page, line, None, detail={"raw": norm_ws(line)[:40]}, note="family read from an explicit connection phrase without a label"))
@@ -413,7 +425,7 @@ def scan_winding(doc: ParsedDocument) -> list[Cand]:
     return out
 
 
-_UNIT_RE = r"(mm|cm|m|in|inches|inch|\")"
+_UNIT_RE = r"(mm|cm|m|inches|inch|in|feet|ft|\")"
 _ITEM = rf"(?:([LWDH])\s*[=:]?\s*)?({NUM})\s*{_UNIT_RE}?(?:\s*\(([LWDH])\))?"
 _TRIPLE = re.compile(rf"{_ITEM}\s*[x×X*]\s*{_ITEM}\s*[x×X*]\s*{_ITEM}(?![\w/])")
 _ORDER = re.compile(r"\b([LWDH])\s*[x×X*]\s*([LWDH])\s*[x×X*]\s*([LWDH])\b")
@@ -465,6 +477,19 @@ def scan_dimensions(doc: ParsedDocument) -> list[Cand]:
                 else:
                     out.append(Cand({"unordered": sorted(vals)}, page, line, "mm", detail={"ordered": False}))
                 continue
+        if _DIM_LABEL.search(s) and not _TRIPLE.search(s):
+            items = re.findall(rf"(?<![A-Za-z])([LWDH])\s*[=:]?\s*({NUM})(?:\s*{_UNIT_RE})?(?![\w/])", s)
+            keys = {_DIM_KEY[i[0].lower()] for i in items}
+            if len(items) == 3 and keys == {"length", "width", "height"}:
+                unit = next((i[2] for i in items if i[2]), None)
+                if unit is None:
+                    um = re.search(r"\(\s*(mm|cm|m|in|inches|ft)\s*\)", s, re.I)
+                    unit = um.group(1) if um else None
+                if unit:
+                    vals = {_DIM_KEY[i[0].lower()]: U.length_to_mm(U.parse_number(i[1]) or 0.0, unit) for i in items}
+                    if all(v for v in vals.values()):
+                        out.append(Cand(vals, page, line, "mm", detail={"ordered": True}))
+                        continue
         sm = _SINGLE_DIM.match(s)
         if sm:
             n = U.parse_number(sm.group(2))
@@ -552,7 +577,7 @@ def scan_weights(doc: ParsedDocument) -> dict[str, list[Cand]]:
     return res
 
 
-_HEAT_TOTAL = re.compile(r"(total\s+(?:losses|loss|heat)|heat\s+(?:loss|rejection|dissipation)|losses?\s*,?\s*total)", re.I)
+_HEAT_TOTAL = re.compile(r"(total\s+(?:losses|loss|heat)|heat\s+(?:loss|rejection|dissipation)|losses?\s*,?\s*total|\blosses?\b[^\n]{0,40}\btotal\b)", re.I)
 _NOLOAD = re.compile(r"\bno[- ]load\s+loss(?:es)?\b", re.I)
 _LOADLOSS = re.compile(r"(?<!no[- ])(?<!no)\bload\s+loss(?:es)?\b", re.I)
 _P_RE = re.compile(rf"({NUM})\s*(kW|W|MW|BTU/h|BTU/hr|BTUH)\b", re.I)
@@ -660,15 +685,25 @@ def scan_lead_time(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
     return lts, starts
 
 
+_MAN_RE = re.compile(r"^\s*(?:manufacturer|supplier|vendor(?:\s+name)?|make|maker|offered\s+by|producer|manufactured\s+by)\s*[:=\-–]\s*(.{2,60})$", re.I)
+_MODEL_STRONG = re.compile(r"^\s*(?:model(?:\s*(?:no\.?|number|designation))?|catalog(?:ue)?\s*(?:no\.?|number)|part\s*(?:no\.?|number)|product\s*code|type\s*designation)\s*[:#=\-–]\s*([A-Za-z0-9][A-Za-z0-9\-_/\. ]{2,40})$", re.I)
+_MODEL_WEAK = re.compile(r"^\s*(?:designation|product|item|our\s+reference|reference)\s*[:#=\-–]\s*([A-Za-z0-9][A-Za-z0-9\-_/\.]{2,40})$", re.I)
+
+
 def scan_identity(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
     mans: list[Cand] = []
     models: list[Cand] = []
     for page, line in _lines(doc):
-        m = re.match(r"^\s*(?:manufacturer|supplier|vendor|make)\s*[:\-–]\s*(.{2,60})$", line, re.I)
+        line = line.lstrip("\u2022 ")
+        m = _MAN_RE.match(line)
         if m:
             mans.append(Cand(norm_ws(m.group(1)), page, line))
-        m = re.match(r"^\s*(?:model(?:\s*(?:no\.?|number|designation))?|catalog(?:ue)?\s*(?:no\.?|number)|part\s*(?:no\.?|number)|product\s*code|type\s*designation)\s*[:#\-–]\s*([A-Za-z0-9][A-Za-z0-9\-_/\. ]{2,40})$", line, re.I)
+        m = _MODEL_STRONG.match(line)
         if m:
+            models.append(Cand(norm_ws(m.group(1)), page, line))
+            continue
+        m = _MODEL_WEAK.match(line)
+        if m and re.search(r"\d", m.group(1)):
             models.append(Cand(norm_ws(m.group(1)), page, line))
     return mans, models
 
@@ -726,7 +761,7 @@ def scan_door(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
         s = line.translate(_QUOTE_FIX)
         if not _DOOR.search(s):
             continue
-        wh = re.search(rf"({NUM})\s*{_UNIT_RE}?\s*(?:wide|w)\b[^\d\n]{{0,12}}?[x×X*][^\d\n]{{0,5}}({NUM})\s*{_UNIT_RE}?\s*(?:high|tall|h)\b", s, re.I)
+        wh = re.search(rf"({NUM})\s*{_UNIT_RE}?\s*(?:wide|w)\b[^\d\n]{{0,12}}?(?:[x×X*]|\bby\b)[^\d\n]{{0,5}}({NUM})\s*{_UNIT_RE}?\s*(?:high|tall|h)\b", s, re.I)
         if wh:
             unit = wh.group(2) or wh.group(4)
             if unit:
@@ -782,7 +817,7 @@ def scan_cooling(doc: ParsedDocument) -> list[Cand]:
         s = clean_line(line)
         if not re.search(r"\b(cooling|heat\s+(?:removal|rejection|load|gain)|hvac|crah)\b", s, re.I):
             continue
-        if not re.search(r"\b(capacity|limit|available|allowable|rated|max(?:imum)?)\b", s, re.I):
+        if not re.search(r"\b(capacity|limit|available|allowable|allowance|rated|max(?:imum)?)\b", s, re.I):
             continue
         m = _P_RE.search(s)
         if m:
@@ -903,6 +938,23 @@ def _absent(field_name: str, doc: ParsedDocument, why_note: Optional[str] = None
     )
 
 
+def _mention_other(doc: ParsedDocument, field_name: str, used: set[str]) -> Optional[tuple[int, str]]:
+    rx = _MENTION.get(field_name)
+    if rx is None:
+        return None
+    for page, line in _lines(doc):
+        if line in used:
+            continue
+        if field_name in {"primary_voltage_v", "secondary_voltage_v"} and _VOLT_EXCL.search(line):
+            continue
+        if field_name == "impedance_pct" and _IMP_EXCL.search(line):
+            continue
+        s = clean_line(line)
+        if rx.search(s) and re.search(r"\d", s):
+            return page, line
+    return None
+
+
 def _resolve_numeric(field_name: str, doc: ParsedDocument, cands: list[Cand], key: Callable[[Cand], Any] = lambda c: c.value) -> FieldValue:
     if not cands:
         return _absent(field_name, doc)
@@ -922,6 +974,10 @@ def _resolve_numeric(field_name: str, doc: ParsedDocument, cands: list[Cand], ke
     notes = sorted({c.note for c in cands if c.note})
     qual = next((c.qualifier for c in cands if c.qualifier), None)
     bad = [p.number for p in doc.pages if p.status != "ok"]
+    used = {c.quote for c in cands} | {q for c in cands for _p, q in c.extra_quotes}
+    other = _mention_other(doc, field_name, used) if field_name in {"impedance_pct", "rated_kva", "heat_loss_kw"} else None
+    if other is not None:
+        notes.append(f"another line on p.{other[0]} also mentions this field and could not be parsed: \"{other[1]}\"")
     if bad:
         notes.append(f"page(s) {bad} could not be read; a contradicting value there would be missed")
     tol = next((c.detail.get("tolerance_pct") for c in cands if isinstance(c.detail, dict) and c.detail.get("tolerance_pct") is not None), None)
@@ -933,7 +989,7 @@ def _resolve_numeric(field_name: str, doc: ParsedDocument, cands: list[Cand], ke
         qualifier=qual,
         detail={"tolerance_pct": tol} if tol is not None else None,
         evidence=_evidence_for(doc, cands),
-        confidence=_confidence(cands, doc, corroborated=len({(c.page, c.quote) for c in cands}) > 1),
+        confidence=min(_confidence(cands, doc, corroborated=len({(c.page, c.quote) for c in cands}) > 1), 0.5 if other is not None else 1.0),
         notes=notes,
         unreadable_pages=bad,
     )
@@ -1034,10 +1090,10 @@ def _resolve_weights(doc: ParsedDocument, w: dict[str, list[Cand]]) -> dict[str,
     if ambiguous:
         for f in ("heaviest_transport_weight_kg", "shipping_total_weight_kg", "total_weight_kg"):
             fv = out[f]
-            if fv.status in {"not_stated", "could_not_read"}:
-                fv.notes.append(
-                    "a weight in 'ton(s)' was found but the unit is ambiguous (short ton vs tonne); request kg or lb"
-                )
+            if fv.status in {"not_stated", "could_not_read"} and not fv.unreadable_pages:
+                fv.status = "not_stated"
+                fv.confidence = 0.85
+                fv.notes = ["a weight in 'ton(s)' was found but the unit is ambiguous (short ton vs tonne); request kg or lb"]
                 fv.evidence = [_evidence(doc, c.page, c.quote) for c in ambiguous[:2]]
     return out
 

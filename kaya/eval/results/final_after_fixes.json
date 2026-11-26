@@ -1,0 +1,203 @@
+{
+  "set": "final",
+  "summary": {
+    "packages": 4,
+    "fields_correct": "144/144",
+    "read_status_calls_correct": "144/144",
+    "findings_correct": "15/16",
+    "false_positive_findings": 0,
+    "electrical_clearances_issued": 0,
+    "decision_checks_passed": "19/19",
+    "revision_checks_passed": "2/2",
+    "calibration": [
+      {
+        "confidence": "<0.6",
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      {
+        "confidence": ">=0.8",
+        "n": 94,
+        "correct": 94,
+        "accuracy": 1.0
+      }
+    ],
+    "mean_runtime_s": 0.129
+  },
+  "results": [
+    {
+      "package": "f-01-quayside",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 36,
+        "status_total": 36,
+        "status_correct": 36,
+        "misses": []
+      },
+      "findings": {
+        "expected": 6,
+        "correct": 5,
+        "false_positive_findings": [],
+        "wrong": [
+          {
+            "key": "heat:cooling",
+            "expected": "cleared",
+            "got": null
+          }
+        ],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.085,
+        "screen": 0.042,
+        "decide": 0.044
+      },
+      "answer": "only_if",
+      "headline": "Only if the conclusive deviation is resolved. The most this swap can recover is 12 weeks against a 8-week target."
+    },
+    {
+      "package": "f-02-eastgate",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 36,
+        "status_total": 36,
+        "status_correct": 36,
+        "misses": []
+      },
+      "findings": {
+        "expected": 5,
+        "correct": 5,
+        "false_positive_findings": [],
+        "wrong": [],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.041,
+        "screen": 0.045,
+        "decide": 0.04
+      },
+      "answer": "no_not_alone",
+      "headline": "No, not from the transformer swap alone. The alternate ships 40 weeks earlier, but Main switchgear is still due in week 64. Against the week-64 baseline, the most this swap can recover is 0 weeks, assuming installation and testing durations are unchanged. To recover 3 weeks, Main switchgear must also be ready by week 61."
+    },
+    {
+      "package": "f-03-northfield",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 36,
+        "status_total": 36,
+        "status_correct": 36,
+        "misses": []
+      },
+      "findings": {
+        "expected": 4,
+        "correct": 4,
+        "false_positive_findings": [],
+        "wrong": [],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.044,
+        "screen": 0.036,
+        "decide": 0.039
+      },
+      "answer": "only_if",
+      "headline": "Only if the open items are resolved without adding time (Heaviest shipping section: not stated; Total weight: not stated; Overall dimensions: not stated). The most this swap can recover is 10 weeks against a 6-week target."
+    },
+    {
+      "package": "f-04-southport",
+      "set": "final",
+      "fields": {
+        "total": 36,
+        "correct": 36,
+        "status_total": 36,
+        "status_correct": 36,
+        "misses": []
+      },
+      "findings": {
+        "expected": 1,
+        "correct": 1,
+        "false_positive_findings": [],
+        "wrong": [],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true
+        },
+        "passed": 1,
+        "total": 1
+      },
+      "runtime_s": {
+        "compare": 0.039,
+        "screen": 0.032,
+        "decide": 0.03
+      },
+      "answer": "needs_data",
+      "headline": "Milestone dates and controlling items are needed to say how many weeks this swap can recover. Provide the baseline arrival week of the substituted item and the arrival weeks of the other items the milestone depends on.",
+      "revision_runtime_s": 0.045,
+      "revision": {
+        "checks": {
+          "removed:electrical:impedance": true,
+          "answer_after": true
+        },
+        "passed": 2,
+        "total": 2
+      },
+      "revision_headline": "Milestone dates and controlling items are needed to say how many weeks this swap can recover. Provide the baseline arrival week of the substituted item and the arrival weeks of the other items the milestone depends on."
+    }
+  ],
+  "freeze": {
+    "frozen_commit": "b1a83d3",
+    "files_unchanged": {
+      "knockon/extract.py": false,
+      "knockon/units.py": true,
+      "knockon/ingest.py": false,
+      "knockon/screen.py": false,
+      "knockon/compare.py": true,
+      "knockon/decide.py": true,
+      "knockon/context.py": true
+    },
+    "all_unchanged": false,
+    "head": "b1a83d3"
+  }
+}

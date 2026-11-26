@@ -1,0 +1,172 @@
+{
+  "set": "final",
+  "fields": {
+    "spec": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2000
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 12470
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "not_stated"
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "not_stated"
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "not_stated"
+      },
+      "heat_loss_kw": {
+        "status": "not_stated"
+      },
+      "lead_time_weeks": {
+        "status": "not_stated"
+      },
+      "lead_time_start": {
+        "status": "not_stated"
+      }
+    },
+    "original": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2000
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 12470
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "not_stated"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          1400,
+          2000,
+          2100
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 3500
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 7100
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 12.5
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 70
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "order"
+      }
+    },
+    "alternate": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2000
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 12470
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "not_stated"
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "not_stated"
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "not_stated"
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 12.309
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 30.333
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "order"
+      }
+    }
+  },
+  "findings": {
+    "weight:elevator": "not_stated",
+    "weight:slab": "not_stated",
+    "dims:ceiling": "not_stated",
+    "heat:cooling": "cleared"
+  },
+  "decision": {
+    "answer": "only_if",
+    "baseline_week": 70,
+    "max_recoverable_weeks": 10,
+    "weeks_earlier_alternate_ships": 39.67,
+    "controlling_item_alternate": "Main switchgear",
+    "requirements": []
+  },
+  "label_corrections": [
+    "original.winding_config corrected to not_stated after the first final run: the original document has no vector-group line (authoring error in the label, found by comparing the label with the rendered document)."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "dev-02-birch",
+  "set": "dev",
+  "title": "Birch campus: transformer T1 alternate, same impedance",
+  "recovery_target_weeks": 12,
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    },
+    {
+      "role": "logistics",
+      "path": "logistics.pdf"
+    },
+    {
+      "role": "schedule",
+      "path": "schedule.json"
+    }
+  ]
+}

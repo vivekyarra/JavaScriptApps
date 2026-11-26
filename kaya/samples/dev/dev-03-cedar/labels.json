@@ -1,0 +1,174 @@
+{
+  "set": "dev",
+  "fields": {
+    "spec": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2500
+      },
+      "primary_voltage_v": {
+        "status": "not_stated"
+      },
+      "secondary_voltage_v": {
+        "status": "not_stated"
+      },
+      "impedance_pct": {
+        "status": "not_stated"
+      },
+      "xd_subtransient_pct": {
+        "status": "documented",
+        "value": 13.0
+      },
+      "winding_config": {
+        "status": "not_stated"
+      },
+      "dimensions_mm": {
+        "status": "not_stated"
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "not_stated"
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "not_stated"
+      },
+      "heat_loss_kw": {
+        "status": "not_stated"
+      },
+      "lead_time_weeks": {
+        "status": "not_stated"
+      },
+      "lead_time_start": {
+        "status": "not_stated"
+      }
+    },
+    "original": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2500
+      },
+      "primary_voltage_v": {
+        "status": "not_stated"
+      },
+      "secondary_voltage_v": {
+        "status": "not_stated"
+      },
+      "impedance_pct": {
+        "status": "not_stated"
+      },
+      "xd_subtransient_pct": {
+        "status": "documented",
+        "value": 12.0
+      },
+      "winding_config": {
+        "status": "not_stated"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          2300,
+          2500,
+          6000
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 17000
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 17000
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 165.0
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 70
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "order"
+      }
+    },
+    "alternate": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2500
+      },
+      "primary_voltage_v": {
+        "status": "not_stated"
+      },
+      "secondary_voltage_v": {
+        "status": "not_stated"
+      },
+      "impedance_pct": {
+        "status": "not_stated"
+      },
+      "xd_subtransient_pct": {
+        "status": "documented",
+        "value": 14.5
+      },
+      "winding_config": {
+        "status": "not_stated"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          2300,
+          2600,
+          6200
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 17500
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 17500
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 210.0
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 36
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "approval"
+      }
+    }
+  },
+  "findings": {
+    "weight:slab": "cleared",
+    "dims:door": "cleared",
+    "dims:ceiling": "cleared",
+    "heat:cooling": "conclusive",
+    "electrical:reactance": "needs_engineer"
+  },
+  "decision": {
+    "answer": "no_not_alone",
+    "baseline_week": 70,
+    "max_recoverable_weeks": 4,
+    "weeks_earlier_alternate_ships": 28,
+    "controlling_item_alternate": "Paralleling switchgear",
+    "requirements": [
+      {
+        "item": "Paralleling switchgear",
+        "must_be_ready_by_week": 64
+      }
+    ]
+  }
+}

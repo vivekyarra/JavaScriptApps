@@ -101,8 +101,12 @@ _STD_RE = re.compile(
 _QUOTE_FIX = str.maketrans({"“": '"', "”": '"', "″": '"', "’": "'", "‘": "'", "′": "'"})
 
 
+_LOADPCT_RE = re.compile(r"\b(?:at|@)\s*\d+(?:\.\d+)?\s*%\s*(?:load|rated|of\s+rated|loading)\b", re.I)
+
+
 def clean_line(line: str) -> str:
     s = line.translate(_QUOTE_FIX)
+    s = _LOADPCT_RE.sub(" ", s)
     s = _TOL_RE.sub(" ", s)
     s = _TEMP_RE.sub(" ", s)
     s = _STD_RE.sub(" ", s)
@@ -266,10 +270,10 @@ def scan_voltages(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
 
 
 _IMP_LABEL = re.compile(r"(%\s*z\b|\bz\s*%|\bz\s*\(\s*%\s*\)|\bpercent(?:age)?\s+impedance|\bimpedance\b|\bimp\.)", re.I)
-_IMP_EXCL = re.compile(r"zero[- ]sequence|\bz0\b|\bx0\b|\br0\b|\bnegative[- ]sequence", re.I)
+_IMP_EXCL = re.compile(r"zero[- ]sequence|\bz0\b|\bx0\b|\br0\b|\bnegative[- ]sequence|impedance\s+toleran|toleran\w*\s+(?:on|of)\s+(?:the\s+)?impedance", re.I)
 _TIER1 = re.compile(rf"[^\d\n]{{0,40}}?({NUM})\s*(%|percent|per\s*cent|pu|p\.u\.)", re.I)
 _TIER0 = re.compile(rf"[^\d\n]{{0,12}}?\(\s*%\s*\)[\s:=.\-–—]*({NUM})\b", re.I)
-_TIER2 = re.compile(rf"[\s:=\-–—.]*({NUM})\b(?!\s*(?:kv|v\b|kva|ohm|Ω|mm|kg))", re.I)
+_TIER2 = re.compile(rf"[\s:=\-–—.]*({NUM})\b(?!\s*(?:kv|v\b|kva|ohm|Ω|mm|kg))(?!\s*[-–—]\s*\d)", re.I)
 
 
 _TOL_VALUE = re.compile(r"(?:±|\+/-|\+-|plus or minus)\s*(\d+(?:\.\d+)?)\s*%?", re.I)
@@ -292,10 +296,12 @@ def scan_impedance(doc: ParsedDocument) -> list[Cand]:
                     out.append(Cand(n0, page, line, "%", qualifier=_qualifier(line), detail={"tolerance_pct": tol}))
                     break
             m1 = _TIER1.match(rest)
+            if m1 and re.match(r"\s*[-–—]\s*\d", rest[m1.end():]):
+                continue  # a range such as '5.5 % - 6.0 %' is not a single value
             if m1:
                 n = U.parse_number(m1.group(1))
                 unit = m1.group(2).lower()
-                if n is None:
+                if n is None or not (0 < n <= 30 or unit in {"pu", "p.u."}):
                     continue
                 if unit in {"pu", "p.u."}:
                     out.append(Cand(n * 100.0, page, line, "%", qualifier=_qualifier(line), note="stated in per-unit; converted to %", detail={"tolerance_pct": tol}))
@@ -628,9 +634,11 @@ def scan_heat(doc: ParsedDocument) -> list[Cand]:
 
 
 _LT_LABEL = re.compile(
-    r"(lead\s*time|delivery(?:\s+time)?|ex[- ]works|ship(?:ment|ping)?\s+(?:time|lead)|production\s+time|manufactur(?:e|ing)\s+(?:time|lead)|delivery\s+period)",
+    r"(lead\s*time|delivery(?:\s+(?:time|period))?|ex[- ]works|ship(?:ping)?\s+lead|production\s+time|manufactur(?:e|ing)\s+(?:time|lead))",
     re.I,
 )
+_LT_SKIP = re.compile(r"\b(transit|installation|commissioning|erection|site\s+work)\b", re.I)
+_CLAUSE_SPLIT = re.compile(r";|(?<=[a-z0-9])\.\s+(?=[A-Z])")
 _LT_VAL = re.compile(rf"({NUM})\s*(?:(?:-|–|—|to)\s*({NUM})\s*)?(weeks?|wks?|wk|days?|months?|mos?)\b", re.I)
 _START_ORDER = re.compile(
     r"\b(aro|(?:after|from|upon)\s+receipt\s+of\s+(?:(?:purchase\s+)?order|po)|from\s+(?:po|p\.o\.|purchase\s+order|order)(?:\s+(?:placement|release|receipt))?|after\s+(?:po|order)\b|from\s+order\s+release|after\s+order\s+(?:placement|release|confirmation))",
@@ -648,40 +656,44 @@ def scan_lead_time(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
     lines = list(_lines(doc))
     for idx, (page, line) in enumerate(lines):
         s = line.translate(_QUOTE_FIX)
-        lm = _LT_LABEL.search(s)
-        if not lm:
+        if not _LT_LABEL.search(s):
             continue
-        m = _LT_VAL.search(s[lm.end():]) or _LT_VAL.search(s)
-        if not m:
-            continue
-        lo = U.parse_number(m.group(1))
-        hi = U.parse_number(m.group(2)) if m.group(2) else lo
-        if lo is None or hi is None:
-            continue
-        wlo, approx = U.time_to_weeks(lo, m.group(3))
-        whi, _ = U.time_to_weeks(hi, m.group(3))
-        if wlo is None or whi is None:
-            continue
-        lo_w, hi_w = min(wlo, whi), max(wlo, whi)
-        note = "months converted at 52/12 weeks per month" if approx else None
-        lts.append(Cand(hi_w, page, line, "weeks", explicit_unit=not approx, detail={"min": lo_w, "max": hi_w}, note=note))
-        window = s
-        nxt = lines[idx + 1][1] if idx + 1 < len(lines) and lines[idx + 1][0] == page else ""
-        if _START_ORDER.search(window) or _START_APPR.search(window) or not (_START_ORDER.search(nxt) or _START_APPR.search(nxt)):
-            ctx_line, ctx_page = line, page
-        else:
-            window = s + " " + nxt
-            ctx_line, ctx_page = nxt, page
-        if _START_ORDER.search(window):
-            c = Cand("order", ctx_page, ctx_line, None)
-            if ctx_line != line:
-                c.extra_quotes.append((page, line))
-            starts.append(c)
-        elif _START_APPR.search(window):
-            c = Cand("approval", ctx_page, ctx_line, None)
-            if ctx_line != line:
-                c.extra_quotes.append((page, line))
-            starts.append(c)
+        clauses = [c for c in _CLAUSE_SPLIT.split(s) if c.strip()]
+        for clause in clauses:
+            if _LT_SKIP.search(clause):
+                continue
+            lm = _LT_LABEL.search(clause)
+            has_start = bool(_START_ORDER.search(clause) or _START_APPR.search(clause))
+            if not lm and not has_start:
+                continue
+            m = (_LT_VAL.search(clause[lm.end():]) if lm else None) or _LT_VAL.search(clause)
+            if not m:
+                continue
+            lo = U.parse_number(m.group(1))
+            hi = U.parse_number(m.group(2)) if m.group(2) else lo
+            if lo is None or hi is None:
+                continue
+            wlo, approx = U.time_to_weeks(lo, m.group(3))
+            whi, _ = U.time_to_weeks(hi, m.group(3))
+            if wlo is None or whi is None:
+                continue
+            lo_w, hi_w = min(wlo, whi), max(wlo, whi)
+            note = "months converted at 52/12 weeks per month" if approx else None
+            quote = line if len(clauses) == 1 else clause.strip()
+            lts.append(Cand(hi_w, page, line, "weeks", explicit_unit=not approx, detail={"min": lo_w, "max": hi_w}, note=note))
+            window = clause
+            ctx_line = line
+            if len(clauses) == 1 and not (_START_ORDER.search(window) or _START_APPR.search(window)):
+                nxt = lines[idx + 1][1] if idx + 1 < len(lines) and lines[idx + 1][0] == page else ""
+                if _START_ORDER.search(nxt) or _START_APPR.search(nxt):
+                    window, ctx_line = nxt, nxt
+            kind = "order" if _START_ORDER.search(window) else "approval" if _START_APPR.search(window) else None
+            if kind:
+                c = Cand(kind, page, ctx_line, None)
+                if ctx_line != line:
+                    c.extra_quotes.append((page, line))
+                starts.append(c)
+            del quote
     return lts, starts
 
 

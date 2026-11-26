@@ -69,6 +69,8 @@ def prepare_case(inp: CaseInput, store: Store) -> CaseContext:
             target = float(manifest["recovery_target_weeks"])
         if isinstance(manifest.get("project_facts"), dict):
             facts = {**manifest["project_facts"], **facts}
+    if target is not None and target < 0:
+        raise ValueError("recovery_target_weeks must not be negative")
     loaded = _docs_from_inputs(docs_in, base)
     revised = _docs_from_inputs(list(inp.revised_documents), base)
 
@@ -100,30 +102,43 @@ def screen_consequences(inp: CaseInput, store: Optional[Store] = None) -> Screen
     return _screen(prepare_case(inp, st))
 
 
+def _signature(f: dict[str, Any]) -> str:
+    """What a finding rests on: its computed values and quoted evidence (not the revision letter in its prose)."""
+    quotes = sorted(e["quote"] for e in (f.get("supplier_evidence") or []) + (f.get("requirement_evidence") or []))
+    return json.dumps({"computed": f.get("computed") or {}, "quotes": quotes}, sort_keys=True, default=str)
+
+
 def _diff(prev: dict[str, Any], new: DecisionResult) -> DecisionDiff:
     pf = {f["key"]: f for f in prev.get("findings", [])}
     nf = {f.key: f for f in new.findings}
-    changed, still_open, unchanged_settled = [], [], []
+    changed, updated, still_open, unchanged_settled = [], [], [], []
     for key, f in nf.items():
         if key in pf:
             before = pf[key]["label"]
             if before != f.label:
                 changed.append({"key": key, "title": f.title, "from": before, "to": f.label})
+            elif _signature(pf[key]) != _signature(f.model_dump(mode="json")):
+                updated.append({"key": key, "title": f.title, "label": f.label, "note": "same label, details changed"})
             elif f.label in {"conclusive", "cleared"}:
                 unchanged_settled.append(key)
             else:
                 still_open.append(key)
-    mp = (prev.get("milestone") or {}).get("max_recoverable_weeks")
-    mn = new.milestone.max_recoverable_weeks if new.milestone else None
+    pm, nm = prev.get("milestone") or {}, new.milestone
+    mp = pm.get("max_recoverable_weeks")
+    mn = nm.max_recoverable_weeks if nm else None
+    moved = bool(nm) and (
+        mp != mn or pm.get("baseline_week") != nm.baseline_week or pm.get("alternate_week_best") != nm.alternate_week_best
+    ) or (not nm and bool(pm))
     return DecisionDiff(
         from_version=prev["version"],
         to_version=new.version,
         changed=changed,
+        updated=updated,
         still_open=still_open,
         unchanged_settled=unchanged_settled,
         new=[k for k in nf if k not in pf],
         removed=[k for k in pf if k not in nf],
-        milestone_moved=(mp != mn),
+        milestone_moved=moved,
         answer_before=prev.get("answer"),
         answer_after=new.answer,
         max_recoverable_before=mp,

@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 from typing import Optional
 
-NUM = r"(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)"
+NUM = r"(?<![\d.,])(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)(?!\d|[.,]\d)"  # strict en-US; '7,5' and '7.000,5' are refused, not misread
 
 
 def parse_number(text: str) -> Optional[float]:
@@ -12,6 +12,8 @@ def parse_number(text: str) -> Optional[float]:
     text = text.strip()
     if not re.fullmatch(NUM, text):
         return None
+    if re.fullmatch(r"[1-9]\d{0,2}\.\d{3}", text):
+        return None  # '2.500' is 2500 in many locales and 2.5 in others: ambiguous, so not read
     return float(text.replace(",", ""))
 
 

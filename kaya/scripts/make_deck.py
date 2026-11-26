@@ -198,7 +198,7 @@ footer(s, 9)
 
 # 10 --------------------------------------------------------------- build + next
 s = prs.slides.add_slide(BLANK); title(s, "Build quality and what comes next")
-for i, (n, l) in enumerate([("$0", "model cost per run on the default path"), ("0.05 s", "median per tool call, 4 CPUs"), ("75", "tests: units, every decision branch, MCP, API"), ("1 command", "./run.sh from a fresh clone")]):
+for i, (n, l) in enumerate([("$0", "model cost per run on the default path"), ("0.05 s", "median per tool call, 4 CPUs"), ("98", "tests: units, every decision branch, MCP, API"), ("1 command", "./run.sh from a fresh clone")]):
     x = 0.6 + i * 3.05
     box(s, x, 1.6, 2.85, 1.7, PALE)
     text(s, x + 0.15, 1.7, 2.6, 0.8, n, 34, True, ACCENT)

@@ -46,6 +46,14 @@
           "title": "Changed",
           "type": "array"
         },
+        "updated": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Updated",
+          "type": "array"
+        },
         "still_open": {
           "items": {
             "type": "string"

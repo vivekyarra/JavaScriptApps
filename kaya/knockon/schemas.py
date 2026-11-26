@@ -163,6 +163,7 @@ class DecisionDiff(BaseModel):
     from_version: int
     to_version: int
     changed: list[dict[str, Any]] = Field(default_factory=list)
+    updated: list[dict[str, Any]] = Field(default_factory=list)
     still_open: list[str] = Field(default_factory=list)
     unchanged_settled: list[str] = Field(default_factory=list)
     new: list[str] = Field(default_factory=list)

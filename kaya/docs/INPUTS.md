@@ -63,3 +63,7 @@ All times are project weeks (week 0 = order release unless `order_release_week` 
 ```
 
 If a logistics document and a project fact disagree, the value is treated as `conflicting` and not used.
+
+## Cases accumulate
+
+A `case_id` names one job. Documents, project facts and the recovery target given for it **accumulate**: a new document for a role is stored as a new revision and replaces the previous one for that role, but a role you do not resend keeps its last document, and facts and a target stay until overwritten. Use a new `case_id` for a different job, otherwise an old specification or schedule can silently apply. Nothing is ever overwritten in the store; every revision and every decision version is kept.

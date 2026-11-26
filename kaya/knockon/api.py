@@ -25,9 +25,17 @@ app = FastAPI(title="KNOCK-ON", version="0.1.0", description="Substitution decis
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_methods=["*"], allow_headers=["*"])
 
 
+def _inside(path: Path, root: Path) -> bool:
+    """True only if `path` is `root` or lies beneath it (a string prefix check would let a sibling like samples_evil through)."""
+    try:
+        path.resolve().relative_to(root.resolve())
+        return True
+    except ValueError:
+        return False
+
+
 def _allowed(path: str) -> bool:
-    p = Path(path).resolve()
-    return str(p).startswith(str(SAMPLES.resolve()))
+    return _inside(Path(path), SAMPLES)
 
 
 def _guard(inp: CaseInput) -> CaseInput:
@@ -99,7 +107,7 @@ def tool_decide(inp: CaseInput) -> Any:
 @app.post("/api/cases/from-sample")
 def from_sample(sample_id: str = Form(...), case_id: Optional[str] = Form(None), recovery_target_weeks: Optional[float] = Form(None)) -> Any:
     pkg = (SAMPLES / sample_id).resolve()
-    if not str(pkg).startswith(str(SAMPLES.resolve())) or not (pkg / "manifest.json").exists():
+    if not _inside(pkg, SAMPLES) or not (pkg / "manifest.json").exists():
         raise HTTPException(404, "unknown sample package")
     inp = CaseInput(package_dir=str(pkg), case_id=case_id, recovery_target_weeks=recovery_target_weeks)
     try:
@@ -111,7 +119,7 @@ def from_sample(sample_id: str = Form(...), case_id: Optional[str] = Form(None),
 @app.post("/api/cases/{case_id}/apply-sample-revision")
 def apply_sample_revision(case_id: str, sample_id: str = Form(...), label: str = Form(...)) -> Any:
     pkg = (SAMPLES / sample_id).resolve()
-    if not str(pkg).startswith(str(SAMPLES.resolve())) or not (pkg / "manifest.json").exists():
+    if not _inside(pkg, SAMPLES) or not (pkg / "manifest.json").exists():
         raise HTTPException(404, "unknown sample package")
     manifest, _ = core.load_manifest(str(pkg))
     rev = next((r for r in manifest.get("revisions", []) if r["label"] == label), None)
@@ -246,7 +254,7 @@ if UI_DIST.exists():
     @app.get("/{path:path}", include_in_schema=False)
     def spa(path: str) -> Any:
         f = (UI_DIST / path).resolve()
-        if path and str(f).startswith(str(UI_DIST.resolve())) and f.is_file():
+        if path and _inside(f, UI_DIST) and f.is_file():
             return FileResponse(f)
         return FileResponse(UI_DIST / "index.html")
 else:

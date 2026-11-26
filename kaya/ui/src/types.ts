@@ -48,6 +48,7 @@ export interface Diff {
   from_version: number;
   to_version: number;
   changed: { key: string; title: string; from: string; to: string }[];
+  updated: { key: string; title: string; label: string; note: string }[];
   still_open: string[];
   unchanged_settled: string[];
   new: string[];

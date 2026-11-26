@@ -27,7 +27,7 @@ python3 -m venv .venv && . .venv/bin/activate
 pip install -e ".[dev]"
 python -m knockon.api            # workbench + API on :8000
 python -m knockon.mcp_server     # MCP server on stdio (what an agent such as Amber connects to)
-pytest                           # 75 tests
+pytest                           # 98 tests
 python -m knockon.evaluate --set dev
 ```
 
@@ -118,6 +118,7 @@ What to take from this:
 * **The decision logic held up on unfamiliar inputs; extraction did not generalise on the first try.** The failures were layout and phrasing gaps (units in table headers, "per cent", "wide by … high", a bullet glyph that made a whole page look unreadable). They were fixed generically and each is now a regression test.
 * **Most misses fail safe, but not all.** In the first final run, 84 of 85 `documented` fields at confidence ≥ 0.8 were correct; the one wrong value was a conflict the parser did not notice, and the other misses were `could_not_read` / `not_stated`, which route to a person. **The milestone first run was worse: two voltages were confidently assigned to the wrong winding** (for example a number written before its "primary" label, or an "HV/LV" pair). That is the error that matters most; it was fixed with order-aware parsing and is covered by tests, but it shows the extractor can be confidently wrong on a layout it has not seen.
 * **These are self-authored synthetic documents, written by the same people who wrote the extractor.** They are not independent, not representative of industry documents, and not evidence of production accuracy. Real vendor PDFs will contain layouts none of these cover. The honest claim is: what it reads, it reads with citations; what it cannot read, it says so.
+* An independent code review found nine confirmed bugs, several of them confidently-wrong reads; all were fixed with regression tests (`docs/REVIEW.md`).
 * Nothing here is reviewed by a practising power-systems engineer.
 
 Reproduce: `python -m knockon.evaluate --set dev|milestone` (the final set refuses a second run unless `--rerun-final`).
@@ -144,8 +145,8 @@ samples/        synthetic packages: dev/, milestone/, final/ (each with labels.j
 scripts/        sample generators and helpers
 eval/results/   recorded evaluation runs (first runs are kept, not overwritten)
 schemas/        JSON Schemas for tool input and output
-tests/          75 tests (units, extraction, every decision branch, MCP, API, regressions)
-docs/           EVAL.md, DATA.md, INPUTS.md, SUBMISSION.md, DEMO_SCRIPT.md, VIDEO_NARRATION.md, PITCH_OUTLINE.md, the deck and media/
+tests/          98 tests (units, extraction, every decision branch, MCP, API, regressions)
+docs/           EVAL.md, REVIEW.md, DATA.md, INPUTS.md, SUBMISSION.md, DEMO_SCRIPT.md, VIDEO_NARRATION.md, PITCH_OUTLINE.md, the deck and media/
 ```
 
 State is stored in SQLite (`data/knockon.db`, override with `KNOCKON_DB`): every document revision is kept immutably and every decision is a numbered version with a diff against the previous one.

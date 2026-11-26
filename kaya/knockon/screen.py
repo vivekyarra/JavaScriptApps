@@ -19,6 +19,17 @@ def _lc(text: str) -> str:
     return text[:1].lower() + text[1:]
 
 
+def _raw(fv: FieldValue) -> str:
+    return str((fv.detail or {}).get("raw") or fv.value)
+
+
+def _clock(fv: FieldValue) -> Optional[int]:
+    import re
+
+    m = re.search(r"(\d{1,2})$", str((fv.detail or {}).get("raw") or "").strip())
+    return int(m.group(1)) if m else None
+
+
 def _unit_name(ctx: CaseContext) -> str:
     model = ctx.f("alternate", "model")
     if model.status == "documented":
@@ -397,6 +408,17 @@ def _reactance(ctx: CaseContext) -> Optional[Finding]:
         )
     r = float(ref.value)
     if U.same_number(a, r, rel=1e-3):
+        tol0 = (spec.detail or {}).get("tolerance_pct") if isinstance(spec.detail, dict) and spec.status == "documented" else None
+        if tol0 is not None and ref is orig and not gen:
+            s0 = float(spec.value)
+            if not (s0 * (1 - tol0 / 100) - 1e-9 <= a <= s0 * (1 + tol0 / 100) + 1e-9):
+                return Finding(
+                    key=key, topic="electrical", label="needs_engineer",
+                    title=f"{what} matches the original but is outside the specification's band: engineer review needed",
+                    summary=f"The alternate's {_lc(what)} ({U.fmt(a)}%) equals the original equipment's, but the specification asks for {U.fmt(s0)}% ±{U.fmt(tol0)}%.",
+                    requirement_evidence=spec.evidence, supplier_evidence=alt.evidence,
+                    follow_up=FollowUp(kind="engineer", question=f"The alternate's {_lc(what)} ({U.fmt(a)}%) is outside the specified {U.fmt(s0)}% ±{U.fmt(tol0)}% band, as is the original's. Please confirm this is accepted."),
+                    confidence=_min_conf(alt, spec))
         return None
     direction = "lower" if a < r else "higher"
     tol = (spec.detail or {}).get("tolerance_pct") if isinstance(spec.detail, dict) and spec.status == "documented" else None
@@ -488,6 +510,14 @@ def _spec_findings(ctx: CaseContext) -> list[Finding]:
         if a.status != "documented":
             out.append(_gap_finding(ctx, "spec:winding", "specification", a, "Winding configuration",
                                     f"Please state the alternate's winding configuration / vector group. The baseline is {ref.value}."))
+        elif str(ref.value) == str(a.value) and _clock(ref) is not None and _clock(a) is not None and _clock(ref) != _clock(a):
+            out.append(Finding(
+                key="spec:winding", topic="specification", label="needs_engineer",
+                title="Vector group clock position changed: engineer review needed",
+                summary=f"The vector group changed from {_raw(ref)} to {_raw(a)} ({_page_ref(a.evidence)}): same winding family, different phase displacement ({_clock(ref) * 30} deg to {_clock(a) * 30} deg). Paralleling and protection assumptions may change.",
+                requirement_evidence=ref.evidence, supplier_evidence=a.evidence,
+                follow_up=FollowUp(kind="engineer", question=f"The alternate's vector group is {_raw(a)} against {_raw(ref)} ({ref_src}). Please confirm the phase displacement is acceptable for paralleling, protection and downstream equipment."),
+                confidence=_min_conf(ref, a)))
         elif str(ref.value) != str(a.value):
             out.append(Finding(
                 key="spec:winding", topic="specification", label="needs_engineer",

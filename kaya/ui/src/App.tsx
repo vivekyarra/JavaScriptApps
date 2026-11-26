@@ -360,6 +360,7 @@ function History({ d, sampleId, onDecision, onError }: { d: Decision; sampleId: 
             Answer: <strong>{ANSWERS[diff.answer_before as Decision["answer"]] ?? diff.answer_before}</strong> → <strong>{ANSWERS[diff.answer_after as Decision["answer"]] ?? diff.answer_after}</strong>. Milestone {diff.milestone_moved ? "moved" : "did not move"} (most recoverable {diff.max_recoverable_before} → {diff.max_recoverable_after} weeks).
           </p>
           {diff.changed.map((c) => <p key={c.key}><strong>{c.title}</strong>: {c.from.replace("_", " ")} → {c.to.replace("_", " ")}</p>)}
+          {diff.updated.map((u) => <p key={u.key}><strong>{u.title}</strong>: still {u.label.replace("_", " ")}, but its details changed</p>)}
           {diff.removed.length > 0 && <p>No longer raised: {diff.removed.map(title).join("; ")}</p>}
           {diff.new.length > 0 && <p>Newly raised: {diff.new.map(title).join("; ")}</p>}
           {diff.still_open.length > 0 && <p>Still open: {diff.still_open.map(title).join("; ")}</p>}

@@ -119,17 +119,30 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
 
     sub_name = str(sched.get("substituted_item_label") or sub.get("name") or "substituted item")
     others: list[tuple[str, float, Optional[str]]] = []
+    unknown_items: list[str] = []
     for it in items:
         if it is sub or it.get("requires") is False:
             continue
         w = _num(it.get("arrival_week", it.get("baseline_arrival_week")))
         if w is not None:
             others.append((str(it.get("name") or it.get("id")), w, it.get("vendor")))
+        else:
+            unknown_items.append(str(it.get("name") or it.get("id")))
+    if unknown_items:
+        for n in unknown_items:
+            missing.append(f"arrival week of '{n}' (the milestone needs it; set requires=false if it does not)")
+        return result(
+            "needs_data",
+            f"The schedule gives no arrival week for {', '.join(unknown_items)}, which the {str((sched.get('milestone') or {}).get('name') or 'milestone').lower()} needs. "
+            "Without it the controlling item, and so the weeks the swap can recover, cannot be stated.",
+            conditions=[], cost_note="", confidence=0.3,
+        )
     ms_cfg = sched.get("milestone") or {}
     ms_name = str(ms_cfg.get("name") or "Milestone")
     install_test = _num(ms_cfg.get("install_test_weeks"))
 
     # ---- alternate arrival (range)
+    order_given = _num(sched.get("order_release_week")) is not None
     order_wk = _num(sched.get("order_release_week")) or 0.0
     appr = _num(sched.get("submittal_approval_weeks"))
     lt_min = float((lt.detail or {}).get("min", lt.value))
@@ -163,7 +176,12 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
     blockers = [f for f in findings if f.label == "conclusive"]
     phys_blockers = [f for f in blockers if f.topic == "physical"]
     routes = [r for r in (sched.get("alternate_routes") or []) if _num(r.get("ready_week")) is not None]
-    route_ready = min((float(r["ready_week"]) for r in routes), default=None) if phys_blockers else None
+
+    def route_for(f: Finding) -> Optional[float]:
+        ready = [float(r["ready_week"]) for r in routes if f.topic == "physical" and (not r.get("resolves") or f.key in r["resolves"])]
+        return min(ready) if ready else None
+
+    route_ready = max((route_for(f) or 0.0 for f in phys_blockers if route_for(f) is not None), default=None)
     rem_weeks = 0.0
     costs: list[CostItem] = []
     for r in sched.get("remediation") or []:
@@ -173,7 +191,7 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
         c = r.get("cost")
         if isinstance(c, dict) and _num(c.get("amount")) is not None and c.get("source"):
             costs.append(CostItem(item=str(r.get("description", "remediation")), amount=float(c["amount"]), currency=str(c.get("currency", "")), source=str(c["source"])))
-    unresolved = [f for f in blockers if not (f.topic == "physical" and route_ready is not None)]
+    unresolved = [f for f in blockers if not (f.topic == "physical" and route_for(f) is not None)]
     alt_ready_best = max(arr_best, route_ready or 0.0) + rem_weeks
     alt_ready_cons = max(arr_cons, route_ready or 0.0) + rem_weeks
     if route_ready is not None:
@@ -184,6 +202,8 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
         titles = "; ".join(f.title for f in unresolved)
         conditions.insert(0, f"unresolved: {titles}")
         short.append("the delivery route is resolved in time" if any(f.topic == "physical" for f in unresolved) else "the conclusive deviation is resolved")
+    if not order_given:
+        conditions.append("the order release week was not provided; it is taken as project week 0")
     conditions.append("installation and testing durations are unchanged")
     short.append("installation and testing durations are unchanged")
 
@@ -213,6 +233,8 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
     else:
         ships_txt = f"The alternate ships {_g(-ships_earlier)} weeks later"
     assump = ", ".join(short[:-1]) + (" and " if len(short) > 1 else "") + short[-1] if short else ""
+    rec_txt = (f"the most this swap can recover is {_g(max_rec)} weeks" if max_rec >= 0
+               else f"this swap would make the milestone {_g(-max_rec)} weeks later")
     potential = ""
     if unresolved and any(f.topic == "physical" for f in unresolved):
         phr = " and ".join(_blocker_phrase(f) for f in unresolved if f.topic == "physical")
@@ -229,13 +251,13 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
     if target is None or target <= 0:
         ctrl_txt = f" {ctrl_alt} (week {_g(ctrl_alt_item[1])}) controls the {ms_name.lower()} milestone." if (ctrl_alt_item and ctrl_alt != sub_name) else ""
         answer = "no_target"
-        headline = (f"Against the week-{_g(baseline_ms)} baseline, the most this swap can recover is {_g(max_rec)} weeks, assuming {assump}.{ctrl_txt}{potential} "
+        headline = (f"Against the week-{_g(baseline_ms)} baseline, {rec_txt}, assuming {assump}.{ctrl_txt}{potential} "
                     "Set a recovery target to get a yes or no.")
     else:
         needed = baseline_ms - target
-        alt_ok = alt_ready_best <= needed + 1e-9
+        alt_ok = alt_ready_best <= needed + 1e-9 and needed >= 0
         for name, w, vendor in others:
-            if w > needed + 1e-9:
+            if needed >= 0 and w > needed + 1e-9:
                 reqs.append(Requirement(item=name, currently_week=w, must_be_ready_by_week=round(needed, 2), owner=vendor))
         if alt_ok and not reqs:
             cons_miss = alt_ready_cons > needed + 1e-9
@@ -249,7 +271,7 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
                     need.append("the open items are resolved without adding time (" + "; ".join(f.title for f in open_findings) + ")")
                     conditions.append("open items still to resolve: " + "; ".join(f.title for f in open_findings))
                 need_txt = " and ".join(need) if need else "the stated conditions hold"
-                headline = f"Only if {need_txt}. The most this swap can recover is {_g(max_rec)} weeks against a {_g(target)}-week target.{potential}"
+                headline = f"Only if {need_txt}. {rec_txt[0].upper() + rec_txt[1:]}, against a {_g(target)}-week target.{potential}"
             else:
                 answer = "yes"
                 headline = (f"Yes. {ships_txt} and the {ms_name.lower()} milestone can move {_g(max_rec)} weeks earlier, "
@@ -258,8 +280,11 @@ def decide(ctx: CaseContext, screen_res: ScreenResult, cmp_res: CompareResult) -
             answer = "no_not_alone"
             req_txt = " and ".join(f"{r.item} must also be ready by week {_g(r.must_be_ready_by_week)}" for r in reqs)
             headline = (f"No, not from the {sub_name} swap alone. {ships_txt}, but {ctrl_alt} is still due in week {_g(ctrl_alt_item[1]) if ctrl_alt_item else _g(alt_ready_best)}. "
-                        f"Against the week-{_g(baseline_ms)} baseline, the most this swap can recover is {_g(max_rec)} weeks, assuming {assump}. "
+                        f"Against the week-{_g(baseline_ms)} baseline, {rec_txt}, assuming {assump}. "
                         f"To recover {_g(target)} weeks, {req_txt}.{potential}")
+        elif needed < 0:
+            answer = "no"
+            headline = f"No. A {_g(target)}-week recovery is longer than the whole baseline (week {_g(baseline_ms)}), so it cannot be reached by any substitution."
         else:
             answer = "no"
             headline = (f"No. Even in the best case the alternate is ready in week {_g(alt_ready_best)}; a {_g(target)}-week recovery needs it by week {_g(needed)}.{potential}")

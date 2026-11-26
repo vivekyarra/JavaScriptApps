@@ -17,6 +17,19 @@ const ANSWERS: Record<Decision["answer"], string> = {
   needs_data: "Needs data",
   no_target: "No target set",
 };
+const KEY_NAMES: Record<string, string> = {
+  "weight:elevator": "Heaviest shipping section vs freight elevator",
+  "weight:slab": "Floor loading",
+  "dims:door": "Overall dimensions vs door",
+  "dims:ceiling": "Height vs overhead clearance",
+  "heat:cooling": "Heat loss vs cooling allowance",
+  "electrical:impedance": "Impedance (%Z)",
+  "electrical:reactance": "Subtransient reactance",
+  "spec:kva": "Rated kVA vs specification",
+  "spec:primary_voltage": "Primary voltage vs specification",
+  "spec:secondary_voltage": "Secondary voltage vs specification",
+  "spec:winding": "Winding configuration",
+};
 const STATUS_TEXT: Record<FieldValue["status"], string> = {
   documented: "documented",
   not_stated: "not stated",
@@ -322,7 +335,7 @@ function History({ d, sampleId, onDecision, onError }: { d: Decision; sampleId: 
     if (sampleId) api.samples().then((all) => setSample(all.find((s) => s.id === sampleId) ?? null));
   }, [sampleId]);
   const diff = d.diff;
-  const title = (k: string) => d.findings.find((f) => f.key === k)?.title ?? k;
+  const title = (k: string) => d.findings.find((f) => f.key === k)?.title ?? KEY_NAMES[k] ?? k;
   const run = (p: Promise<Decision>) => p.then(onDecision).catch((e) => onError(e.message));
   return (
     <section>

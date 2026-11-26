@@ -145,10 +145,16 @@ scripts/        sample generators and helpers
 eval/results/   recorded evaluation runs (first runs are kept, not overwritten)
 schemas/        JSON Schemas for tool input and output
 tests/          75 tests (units, extraction, every decision branch, MCP, API, regressions)
-docs/           EVAL.md, DATA.md, INPUTS.md, DEMO_SCRIPT.md, PITCH_OUTLINE.md
+docs/           EVAL.md, DATA.md, INPUTS.md, SUBMISSION.md, DEMO_SCRIPT.md, VIDEO_NARRATION.md, PITCH_OUTLINE.md, the deck and media/
 ```
 
 State is stored in SQLite (`data/knockon.db`, override with `KNOCKON_DB`): every document revision is kept immutably and every decision is a numbered version with a diff against the previous one.
+
+## Submission materials
+
+* Pitch deck (10 slides): [`docs/KNOCK-ON-pitch-deck.pptx`](docs/KNOCK-ON-pitch-deck.pptx)
+* Demo video (3 min 8 s, captioned): [`docs/media/knockon-demo.mp4`](docs/media/knockon-demo.mp4); voice-over lines in [`docs/VIDEO_NARRATION.md`](docs/VIDEO_NARRATION.md)
+* Everything the Devpost form asks for, with the fields only the team can fill: [`docs/SUBMISSION.md`](docs/SUBMISSION.md)
 
 ## Licence
 

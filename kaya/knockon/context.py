@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional
 
 from . import extract as X
+from . import llm_extract
 from .ingest import ParsedDocument
 from .schemas import Evidence, FieldValue
 
@@ -102,8 +103,12 @@ def build_context(
 ) -> CaseContext:
     facts = dict(facts or {})
     fields: dict[str, dict[str, FieldValue]] = {}
+    llm = llm_extract.client_from_env()
+    notes: list[str] = []
     for role, doc in docs.items():
         fields[role] = X.extract_document(doc)
+        if llm is not None:
+            notes += llm_extract.augment(doc, fields[role], llm)
     doc_constraints = fields.get("logistics", {})
     fact_constraints = _facts_to_constraints(facts)
     constraints = {n: _merge_constraint(n, doc_constraints.get(n), fact_constraints.get(n)) for n in X.CONSTRAINT_FIELDS}
@@ -137,4 +142,5 @@ def build_context(
         target=eff_target,
         equipment_type=eq_type,
         inputs_hash=h.hexdigest(),
+        notes=notes,
     )

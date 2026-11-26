@@ -43,6 +43,21 @@ def _gap_finding(ctx: CaseContext, key: str, topic: str, fv: FieldValue, what: s
     if fv.status == "could_not_read":
         pages = fv.unreadable_pages
         doc = next((e.document for e in fv.evidence), None) or ctx.docs["alternate"].name
+        if fv.evidence and not pages:
+            e = fv.evidence[0]
+            return Finding(
+                key=key,
+                topic=topic,  # type: ignore[arg-type]
+                label="could_not_read",
+                title=f"{what}: could not read",
+                summary=f"A line on p.{e.page} mentions {_lc(what)} but its value could not be read reliably: \"{e.quote}\". Not treated as stated.",
+                supplier_evidence=fv.evidence,
+                follow_up=FollowUp(
+                    kind="readable_copy",
+                    question=f"{what} on p.{e.page} of {doc} could not be read reliably (\"{e.quote}\"). Please confirm the value or send a clearer text-based copy.",
+                ),
+                confidence=0.0,
+            )
         return Finding(
             key=key,
             topic=topic,  # type: ignore[arg-type]

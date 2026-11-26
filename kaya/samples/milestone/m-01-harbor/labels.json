@@ -1,0 +1,196 @@
+{
+  "set": "milestone",
+  "fields": {
+    "spec": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 1500
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 12470
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "not_stated"
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "not_stated"
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "not_stated"
+      },
+      "heat_loss_kw": {
+        "status": "not_stated"
+      },
+      "lead_time_weeks": {
+        "status": "not_stated"
+      },
+      "lead_time_start": {
+        "status": "not_stated"
+      }
+    },
+    "original": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 1500
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 12470
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          1400,
+          2000,
+          2100
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 3900
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 6300
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 11.2
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 70
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "order"
+      }
+    },
+    "alternate": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 1500
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 12470
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 6.0
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          1498.6,
+          2108.2,
+          2209.8
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 4100.4
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 6713.2
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 11.9
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 39.0
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "approval"
+      }
+    }
+  },
+  "findings": {
+    "weight:elevator": "conclusive",
+    "weight:slab": "conclusive",
+    "dims:door": "cleared",
+    "heat:cooling": "cleared",
+    "electrical:impedance": "needs_engineer"
+  },
+  "decision": {
+    "answer": "no_not_alone",
+    "baseline_week": 72,
+    "max_recoverable_weeks": 0,
+    "weeks_earlier_alternate_ships": 25,
+    "controlling_item_alternate": "Switchgear lineup SG-1",
+    "requirements": [
+      {
+        "item": "Switchgear lineup SG-1",
+        "must_be_ready_by_week": 69
+      }
+    ]
+  },
+  "revision": {
+    "changed": {
+      "weight:elevator": [
+        "conclusive",
+        "cleared"
+      ]
+    },
+    "still_open": [
+      "electrical:impedance"
+    ],
+    "milestone_moved": false,
+    "answer_after": "no_not_alone"
+  }
+}

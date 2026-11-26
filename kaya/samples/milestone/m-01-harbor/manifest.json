@@ -1,0 +1,40 @@
+{
+  "id": "m-01-harbor",
+  "set": "milestone",
+  "title": "Harbor campus: transformer T1 alternate (imperial units)",
+  "recovery_target_weeks": 3,
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    },
+    {
+      "role": "logistics",
+      "path": "logistics.pdf"
+    },
+    {
+      "role": "schedule",
+      "path": "schedule.json"
+    }
+  ],
+  "revisions": [
+    {
+      "label": "D",
+      "documents": [
+        {
+          "role": "alternate",
+          "path": "alternate_revD.pdf",
+          "revision": "D"
+        }
+      ]
+    }
+  ]
+}

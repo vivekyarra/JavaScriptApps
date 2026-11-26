@@ -196,6 +196,36 @@ _SEC_LABEL = re.compile(r"\b(secondary|lv|l\.v\.|low[- ]?voltage|output)\b", re.
 _VOLT_EXCL = re.compile(r"\b(bil|insulation|withstand|impulse|test|tap|taps)\b", re.I)
 
 
+_PAIR_LABEL = re.compile(r"\b(?:hv\s*/\s*lv|h\.?v\.?\s*/\s*l\.?v\.?|primary\s*/\s*secondary|high\s*/\s*low)\b", re.I)
+_VOLT_TOKEN = re.compile(_VOLT_NUM, re.I)
+
+
+def _volt_tokens(seg: str) -> list[float]:
+    out = []
+    for m in _VOLT_TOKEN.finditer(seg):
+        n = U.parse_number(m.group(1))
+        v = U.volts_from(n, m.group(2)) if n is not None else None
+        if v is not None and v > 0:
+            out.append(v)
+    return out
+
+
+def _ratio_pair(s: str) -> Optional[tuple[float, float]]:
+    m = _RATIO_RE.search(s)
+    if not m:
+        return None
+    a, b = U.parse_number(m.group(1)), U.parse_number(m.group(3))
+    ua, ub = m.group(2) or m.group(4), m.group(4)
+    if a is None or b is None:
+        return None
+    va, vb = U.volts_from(a, ua), U.volts_from(b, ub)
+    if va is None or vb is None or vb <= 0:
+        return None
+    if m.group(2) is None and abs(va / vb - 1.732) < 0.02:
+        return None  # 480/277 V is line-to-line / line-to-neutral, not a voltage ratio
+    return (va, vb) if va > vb else None
+
+
 def scan_voltages(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
     pri: list[Cand] = []
     sec: list[Cand] = []
@@ -203,45 +233,39 @@ def scan_voltages(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
         s = clean_line(line)
         if _VOLT_EXCL.search(s):
             continue
-        low = s.lower()
-        if not re.search(r"\b(volt|voltage|ratio|primary|secondary|hv|lv|kv|v)\b", low):
+        if not re.search(r"\b(volt|voltage|ratio|primary|secondary|hv|lv|kv|v)\b", s.lower()):
             continue
-        labels = sorted(
-            [(m.start(), "p") for m in _PRI_LABEL.finditer(s)] + [(m.start(), "s") for m in _SEC_LABEL.finditer(s)]
-        )
-        matched_labelled = False
-        for i, (pos, kind) in enumerate(labels):
-            end = labels[i + 1][0] if i + 1 < len(labels) else len(s)
-            seg = s[pos:end]
-            mm = re.search(_VOLT_NUM, seg, re.I)
-            if mm:
-                n = U.parse_number(mm.group(1))
-                v = U.volts_from(n, mm.group(2)) if n is not None else None
-                if v is not None and v > 0:
+        if _PAIR_LABEL.search(s):
+            pr = _ratio_pair(s)
+            if pr:
+                pri.append(Cand(pr[0], page, line, "V"))
+                sec.append(Cand(pr[1], page, line, "V"))
+            continue
+        labels = sorted([(m.start(), m.end(), "p") for m in _PRI_LABEL.finditer(s)] + [(m.start(), m.end(), "s") for m in _SEC_LABEL.finditer(s)])
+        if labels:
+            segs = [s[: labels[0][0]]]
+            for i, (_, e, _k) in enumerate(labels):
+                segs.append(s[e: labels[i + 1][0] if i + 1 < len(labels) else len(s)])
+            after_style = bool(_volt_tokens(segs[-1])) or any(_volt_tokens(sg) for sg in segs[1:])
+            before_style = (not _volt_tokens(segs[-1])) and bool(_volt_tokens(segs[0]))
+            assigned = False
+            for i, (_, _e, kind) in enumerate(labels):
+                seg = segs[i] if before_style else segs[i + 1]
+                toks = _volt_tokens(seg)
+                if toks:
+                    v = toks[-1] if before_style else toks[0]
                     (pri if kind == "p" else sec).append(Cand(v, page, line, "V"))
-                    matched_labelled = True
-        if matched_labelled:
-            continue
-        m = _RATIO_RE.search(s)
-        if m:
-            a = U.parse_number(m.group(1))
-            b = U.parse_number(m.group(3))
-            ua = m.group(2) or m.group(4)
-            ub = m.group(4)
-            if a is None or b is None:
+                    assigned = True
+            if assigned:
                 continue
-            va, vb = U.volts_from(a, ua), U.volts_from(b, ub)
-            if va is None or vb is None:
-                continue
-            if m.group(2) is None and vb > 0 and abs(va / vb - 1.732) < 0.02:
-                continue  # 480/277 V is line-to-line / line-to-neutral, not a voltage ratio
-            if va > vb:
-                pri.append(Cand(va, page, line, "V"))
-                sec.append(Cand(vb, page, line, "V"))
+        pr = _ratio_pair(s)
+        if pr:
+            pri.append(Cand(pr[0], page, line, "V"))
+            sec.append(Cand(pr[1], page, line, "V"))
     return pri, sec
 
 
-_IMP_LABEL = re.compile(r"(%\s*z\b|\bz\s*\(\s*%\s*\)|\bpercent(?:age)?\s+impedance|\bimpedance\b|\bimp\.)", re.I)
+_IMP_LABEL = re.compile(r"(%\s*z\b|\bz\s*%|\bz\s*\(\s*%\s*\)|\bpercent(?:age)?\s+impedance|\bimpedance\b|\bimp\.)", re.I)
 _IMP_EXCL = re.compile(r"zero[- ]sequence|\bz0\b|\bx0\b|\br0\b|\bnegative[- ]sequence", re.I)
 _TIER1 = re.compile(rf"[^\d\n]{{0,40}}?({NUM})\s*(%|percent|pu|p\.u\.)", re.I)
 _TIER2 = re.compile(rf"[\s:=\-–—.]*({NUM})\b(?!\s*(?:kv|v\b|kva|ohm|Ω|mm|kg))", re.I)
@@ -281,8 +305,9 @@ def scan_impedance(doc: ParsedDocument) -> list[Cand]:
                                     note="no unit stated; value below 1 read as per-unit", detail={"tolerance_pct": tol}))
                     break
                 if 1 <= n <= 30:
-                    out.append(Cand(n, page, line, "%", explicit_unit=False, qualifier=_qualifier(line),
-                                    note="no unit stated; read as percent", detail={"tolerance_pct": tol}))
+                    pct_label = "%" in lm.group(0)
+                    out.append(Cand(n, page, line, "%", explicit_unit=pct_label, qualifier=_qualifier(line),
+                                    note=None if pct_label else "no unit stated; read as percent", detail={"tolerance_pct": tol}))
                     break
     return out
 
@@ -316,7 +341,7 @@ def scan_xd(doc: ParsedDocument) -> list[Cand]:
     return out
 
 
-_WIND_LABEL = re.compile(r"(vector\s+group|winding\s+(?:connection|configuration|arrangement)s?|connections?|configuration|phase\s+displacement)", re.I)
+_WIND_LABEL = re.compile(r"(vector\s+group|winding\s+(?:connection|configuration|arrangement)s?|connected|connections?|configuration|phase\s+(?:displacement|relationship)|connection\s+group)", re.I)
 _IEC_GROUP = re.compile(r"\b(YNyn\d{0,2}|Ynyn\d{0,2}|YNd\d{0,2}|Ynd\d{0,2}|Dyn\d{0,2}|Dy\d{1,2}|Dd\d{0,2}|Yd\d{0,2}|Yyn\d{0,2}|Yy\d{0,2})\b")
 _WORD_FAMILIES = [
     (re.compile(r"\bdelta[\s\-–/]*(?:solidly\s+|resistance\s+)?(?:grounded\s+)?(?:wye|star|y)\b", re.I), "delta-wye"),
@@ -368,6 +393,17 @@ def scan_winding(doc: ParsedDocument) -> list[Cand]:
             pri_conn = (page, line, pm.group(1).lower())
         if sm and not sec_conn:
             sec_conn = (page, line, sm.group(1).lower())
+    if not out:
+        fam_hits: dict[str, tuple[int, str]] = {}
+        for page, line in _lines(doc):
+            if _VOLT_EXCL.search(line):
+                continue
+            for rx, fam in _WORD_FAMILIES[:2] + _WORD_FAMILIES[2:]:
+                if rx.search(line) and not re.search(r"\b(primary|secondary)\b", line, re.I):
+                    fam_hits.setdefault(fam, (page, line))
+        if len(fam_hits) == 1:
+            fam, (page, line) = next(iter(fam_hits.items()))
+            out.append(Cand(fam, page, line, None, detail={"raw": norm_ws(line)[:40]}, note="family read from an explicit connection phrase without a label"))
     if not out and pri_conn and sec_conn:
         norm = {"star": "wye", "wye": "wye", "delta": "delta"}
         fam = f"{norm[pri_conn[2]]}-{norm[sec_conn[2]]}"
@@ -378,9 +414,8 @@ def scan_winding(doc: ParsedDocument) -> list[Cand]:
 
 
 _UNIT_RE = r"(mm|cm|m|in|inches|inch|\")"
-_TRIPLE = re.compile(
-    rf"({NUM})\s*{_UNIT_RE}?\s*[x×X*]\s*({NUM})\s*{_UNIT_RE}?\s*[x×X*]\s*({NUM})\s*{_UNIT_RE}?(?![\w/])",
-)
+_ITEM = rf"(?:([LWDH])\s*[=:]?\s*)?({NUM})\s*{_UNIT_RE}?(?:\s*\(([LWDH])\))?"
+_TRIPLE = re.compile(rf"{_ITEM}\s*[x×X*]\s*{_ITEM}\s*[x×X*]\s*{_ITEM}(?![\w/])")
 _ORDER = re.compile(r"\b([LWDH])\s*[x×X*]\s*([LWDH])\s*[x×X*]\s*([LWDH])\b")
 _ORDER_WORDS = re.compile(r"\b(length|width|depth|height)\s*[x×X*]\s*(length|width|depth|height)\s*[x×X*]\s*(length|width|depth|height)\b", re.I)
 _DIM_LABEL = re.compile(r"(dimension|footprint|overall\s+size|\bsize\b|\bL\s*[x×]\s*W|\bW\s*[x×]\s*D)", re.I)
@@ -398,27 +433,33 @@ def scan_dimensions(doc: ParsedDocument) -> list[Cand]:
                 continue
             m = _TRIPLE.search(s)
             if m and _DIM_LABEL.search(s):
-                unit = next((g for g in (m.group(2), m.group(4), m.group(6)) if g), None)
+                g = m.groups()
+                items = [(g[0], g[1], g[2], g[3]), (g[4], g[5], g[6], g[7]), (g[8], g[9], g[10], g[11])]
+                unit = next((it[2] for it in items if it[2]), None)
                 if unit is None:
                     um = re.search(r"\b(mm|cm|in|inches|inch)\b|\(\s*(m)\s*\)", s, re.I)
                     unit = (um.group(1) or um.group(2)) if um else None
                 if unit is None:
                     continue
                 vals = []
-                for g in (m.group(1), m.group(3), m.group(5)):
-                    n = U.parse_number(g)
+                for it in items:
+                    n = U.parse_number(it[1])
                     mm = U.length_to_mm(n, unit) if n is not None else None
                     vals.append(mm)
                 if None in vals:
                     continue
+                letters = [(it[0] or it[3] or "").lower() for it in items]
                 keys = None
-                om = _ORDER.search(s)
-                if om:
-                    keys = [_DIM_KEY[x.lower()] for x in om.groups()]
+                if all(letters) and len({_DIM_KEY[x] for x in letters}) == 3:
+                    keys = [_DIM_KEY[x] for x in letters]
                 else:
-                    ow = _ORDER_WORDS.search(s)
-                    if ow:
-                        keys = [_DIM_KEY[x.lower()] for x in ow.groups()]
+                    om = _ORDER.search(s)
+                    if om:
+                        keys = [_DIM_KEY[x.lower()] for x in om.groups()]
+                    else:
+                        ow = _ORDER_WORDS.search(s)
+                        if ow:
+                            keys = [_DIM_KEY[x.lower()] for x in ow.groups()]
                 if keys and len(set(keys)) == 3:
                     out.append(Cand(dict(zip(keys, vals)), page, line, "mm", detail={"ordered": True}))
                 else:
@@ -445,10 +486,30 @@ _W_RE = re.compile(rf"({NUM})\s*(kgs?|tonnes?|metric tons?|t|lbs?\.?|pounds|kips
 _W_AMBIG = re.compile(rf"({NUM})\s*(tons?)\b", re.I)
 _HEAVIEST = re.compile(r"\b(heaviest|largest|maximum|max\.?)\b", re.I)
 _SECTION_WORDS = re.compile(r"\b(section|piece|split|segment|lift|lifting|shipping group|shipping unit)\b", re.I)
-_SHIP_WORDS = re.compile(r"\b(shipping|shipped|shipment|transport(?:ation|ed)?)\b", re.I)
+_SHIP_WORDS = re.compile(r"\b(shipping|shipped|ships?|shipment|transport(?:ation|ed)?)\b", re.I)
 _COMPONENT_WORDS = re.compile(r"\b(core|coil|tank|radiator|conservator|bushing|skid|assembly|cabinet|enclosure|module|cubicle|vessel|crate|housing)\b", re.I)
 _TOTAL_WORDS = re.compile(r"\b(total|gross|operating|in[- ]service|complete|installed|filled)\b", re.I)
 _OIL = re.compile(r"\b(oil|coolant|fluid|liquid)\b", re.I)
+
+
+_BRACKET_W = re.compile(r"\(\s*(kgs?|lbs?|tonnes?|t|kips?)\s*\)", re.I)
+_TRAILING_NUM = re.compile(rf"({NUM})\s*$")
+
+
+def _weight_match(s: str) -> Optional[tuple[float, str, int]]:
+    """(value, unit, start) from 'N kg' or from a bare trailing number whose unit is in a '(lb)' header."""
+    m = _W_RE.search(s)
+    if m:
+        n = U.parse_number(m.group(1))
+        return (n, m.group(2), m.start()) if n is not None else None
+    b = _BRACKET_W.search(s)
+    if b:
+        t = _TRAILING_NUM.search(s)
+        if t and t.start() > b.end() - 1:
+            n = U.parse_number(t.group(1))
+            if n is not None:
+                return (n, b.group(1), b.start())
+    return None
 
 
 def scan_weights(doc: ParsedDocument) -> dict[str, list[Cand]]:
@@ -456,13 +517,14 @@ def scan_weights(doc: ParsedDocument) -> dict[str, list[Cand]]:
     ambiguous_notes: list[tuple[int, str]] = []
     for page, line in _lines(doc):
         s = line.translate(_QUOTE_FIX)
-        m = _W_RE.search(s)
+        wm = _weight_match(s)
+        m = wm
         if not m:
             if _W_AMBIG.search(s) and re.search(r"\b(weight|mass|section|piece|lift|heaviest)\b", s, re.I):
                 ambiguous_notes.append((page, line))
             continue
-        n = U.parse_number(m.group(1))
-        kg = U.weight_to_kg(n, m.group(2)) if n is not None else None
+        n, w_unit, w_start = m
+        kg = U.weight_to_kg(n, w_unit)
         if kg is None:
             continue
         low = s.lower()
@@ -476,7 +538,7 @@ def scan_weights(doc: ParsedDocument) -> dict[str, list[Cand]]:
         if is_heaviest:
             res["heaviest"].append(Cand(kg, page, line, "kg"))
         elif is_section and (_SHIP_WORDS.search(s) or has_weight_word or re.search(r"\b(section|piece)\s*\w{0,3}\b", low)) and not is_total:
-            res["section"].append(Cand(kg, page, line, "kg", detail={"label": norm_ws(s[: m.start()]).strip(" :-–—|")}))
+            res["section"].append(Cand(kg, page, line, "kg", detail={"label": norm_ws(s[:w_start]).strip(" :-–—|")}))
         elif is_total and not is_ship_total:
             res["total"].append(Cand(kg, page, line, "kg"))
         elif is_ship_total:
@@ -496,17 +558,34 @@ _LOADLOSS = re.compile(r"(?<!no[- ])(?<!no)\bload\s+loss(?:es)?\b", re.I)
 _P_RE = re.compile(rf"({NUM})\s*(kW|W|MW|BTU/h|BTU/hr|BTUH)\b", re.I)
 
 
+_BRACKET_P = re.compile(r"\(\s*(kW|W|MW|BTU/h|BTU/hr|BTUH)\s*\)", re.I)
+
+
+def _power_match(s: str) -> Optional[tuple[float, str]]:
+    m = _P_RE.search(s)
+    if m:
+        n = U.parse_number(m.group(1))
+        return (n, m.group(2)) if n is not None else None
+    b = _BRACKET_P.search(s)
+    if b:
+        t = _TRAILING_NUM.search(s)
+        if t and t.start() > b.end() - 1:
+            n = U.parse_number(t.group(1))
+            if n is not None:
+                return (n, b.group(1))
+    return None
+
+
 def scan_heat(doc: ParsedDocument) -> list[Cand]:
     out: list[Cand] = []
     nl: Optional[Cand] = None
     ll: Optional[Cand] = None
     for page, line in _lines(doc):
         s = clean_line(line)
-        m = _P_RE.search(s)
-        if not m:
+        pm = _power_match(s)
+        if not pm:
             continue
-        n = U.parse_number(m.group(1))
-        kw = U.power_to_kw(n, m.group(2)) if n is not None else None
+        kw = U.power_to_kw(pm[0], pm[1])
         if kw is None:
             continue
         if _NOLOAD.search(s) and not _HEAT_TOTAL.search(s):
@@ -617,7 +696,7 @@ def scan_elevator(doc: ParsedDocument) -> list[Cand]:
     return freight or out
 
 
-_PRESS_RE = re.compile(rf"({NUM})\s*(kg/m2|kg/m²|kPa|kN/m2|kN/m²|psf|lbs?/ft2|lbs?/ft²|lbs?/sq\.? ?ft)", re.I)
+_PRESS_RE = re.compile(rf"({NUM})\s*(kg/m2|kg/m²|kg\s+per\s+(?:square\s+met(?:er|re)|m2|m²)|kPa|kN/m2|kN/m²|psf|lbs?/ft2|lbs?/ft²|lbs?/sq\.? ?ft|lbs?\s+per\s+(?:square\s+foot|sq\.? ?ft))", re.I)
 
 
 def scan_slab(doc: ParsedDocument) -> list[Cand]:
@@ -647,6 +726,17 @@ def scan_door(doc: ParsedDocument) -> tuple[list[Cand], list[Cand]]:
         s = line.translate(_QUOTE_FIX)
         if not _DOOR.search(s):
             continue
+        wh = re.search(rf"({NUM})\s*{_UNIT_RE}?\s*(?:wide|w)\b[^\d\n]{{0,12}}?[x×X*][^\d\n]{{0,5}}({NUM})\s*{_UNIT_RE}?\s*(?:high|tall|h)\b", s, re.I)
+        if wh:
+            unit = wh.group(2) or wh.group(4)
+            if unit:
+                a, b = U.parse_number(wh.group(1)), U.parse_number(wh.group(3))
+                wa = U.length_to_mm(a, unit) if a is not None else None
+                hb = U.length_to_mm(b, unit) if b is not None else None
+                if wa is not None and hb is not None:
+                    widths.append(Cand(wa, page, line, "mm"))
+                    heights.append(Cand(hb, page, line, "mm"))
+                    continue
         pm = _PAIR.search(s)
         if pm and re.search(r"\b(w\s*[x×]\s*h|width\s*[x×]\s*height)\b", s, re.I):
             unit = pm.group(2) or pm.group(4)
@@ -690,9 +780,9 @@ def scan_cooling(doc: ParsedDocument) -> list[Cand]:
     out: list[Cand] = []
     for page, line in _lines(doc):
         s = clean_line(line)
-        if not re.search(r"\b(cooling|heat\s+(?:removal|rejection|load)|hvac|crah)\b", s, re.I):
+        if not re.search(r"\b(cooling|heat\s+(?:removal|rejection|load|gain)|hvac|crah)\b", s, re.I):
             continue
-        if not re.search(r"\b(capacity|limit|available|rated|max(?:imum)?)\b", s, re.I):
+        if not re.search(r"\b(capacity|limit|available|allowable|rated|max(?:imum)?)\b", s, re.I):
             continue
         m = _P_RE.search(s)
         if m:
@@ -746,9 +836,55 @@ def _confidence(cands: list[Cand], doc: ParsedDocument, corroborated: bool) -> f
     return max(0.05, min(0.95, round(score, 2)))
 
 
+_MENTION = {
+    "impedance_pct": re.compile(r"(impedance|%\s*z\b|\bz\s*%)", re.I),
+    "dimensions_mm": re.compile(r"(dimension|overall\s+size|footprint|\bsize\b)", re.I),
+    "heaviest_transport_weight_kg": re.compile(r"((shipping|transport|heaviest|lift|section|piece|split).*(weight|mass)|(weight|mass).*(shipping|section|piece|lift|heaviest))", re.I),
+    "total_weight_kg": re.compile(r"((total|gross|operating|filled|complete).*(weight|mass)|(weight|mass).*(total|filled|complete))", re.I),
+    "heat_loss_kw": re.compile(r"(losses|loss\b|heat\s+(?:loss|rejection|dissipation))", re.I),
+    "lead_time_weeks": re.compile(r"(lead\s*time|delivery|ex[- ]works)", re.I),
+    "rated_kva": re.compile(r"(kva|mva)", re.I),
+    "primary_voltage_v": re.compile(r"(primary|\bhv\b|high[- ]voltage)", re.I),
+    "secondary_voltage_v": re.compile(r"(secondary|\blv\b|low[- ]voltage)", re.I),
+    "elevator_capacity_kg": re.compile(r"(elevator|lift|hoist)", re.I),
+    "slab_limit_kg_m2": re.compile(r"((floor|slab).*(load|capacity)|(load|capacity).*(floor|slab))", re.I),
+    "door_width_mm": re.compile(r"\bdoor", re.I),
+    "door_height_mm": re.compile(r"\bdoor", re.I),
+    "ceiling_clearance_mm": re.compile(r"(ceiling|overhead|headroom|clear\s+height)", re.I),
+    "cooling_capacity_kw": re.compile(r"(cooling|heat\s+(?:removal|gain)|hvac|crah)", re.I),
+}
+
+
+def _mention(doc: ParsedDocument, field_name: str) -> Optional[tuple[int, str]]:
+    """A readable line that talks about the field and contains a number, but yielded no parsed value."""
+    rx = _MENTION.get(field_name)
+    if rx is None:
+        return None
+    for page, line in _lines(doc):
+        if field_name in {"primary_voltage_v", "secondary_voltage_v"} and _VOLT_EXCL.search(line):
+            continue
+        if field_name == "impedance_pct" and _IMP_EXCL.search(line):
+            continue
+        s = clean_line(line)
+        if rx.search(s) and re.search(r"\d", s):
+            return page, line
+    return None
+
+
 def _absent(field_name: str, doc: ParsedDocument, why_note: Optional[str] = None) -> FieldValue:
     bad = [p.number for p in doc.pages if p.status != "ok"]
     notes = [why_note] if why_note else []
+    hit = _mention(doc, field_name)
+    if hit is not None:
+        return FieldValue(
+            field=field_name,
+            status="could_not_read",
+            unit=FIELD_UNITS.get(field_name),
+            evidence=[_evidence(doc, hit[0], hit[1])],
+            unreadable_pages=bad,
+            confidence=0.0,
+            notes=notes + ["a line mentions this field but no value could be read from it reliably; confirm by hand"],
+        )
     if bad:
         return FieldValue(
             field=field_name,

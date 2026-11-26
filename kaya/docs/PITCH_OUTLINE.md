@@ -9,4 +9,4 @@
 7. **Trust.** Every number cites page and quote; a quote not found on the page is dropped; no electrical clearance, no invented costs; "not stated" and "could not read" are different questions.
 8. **Unfamiliar inputs and revisions.** A scanned page, a layout never seen, a revised vendor reply that changes the same decision and shows what changed.
 9. **Honest evaluation.** First-run results on unfamiliar documents (milestone findings 2/11; final fields 125/144, findings 7/16), what broke, the generic fixes, the regression tests. Self-authored synthetic data, no engineer review yet.
-10. **Build quality and next steps.** Default path needs no model: $0 and about 0.05 s per call; 74 tests; one-command setup. Round 2: engineer-checked electrical method, OCR with citations, nameplate-at-delivery check against accepted conditions (Track 02 bridge).
+10. **Build quality and next steps.** Default path needs no model: $0 and about 0.05 s per call; 75 tests; one-command setup. Round 2: engineer-checked electrical method, OCR with citations, nameplate-at-delivery check against accepted conditions (Track 02 bridge).

@@ -27,7 +27,7 @@ python3 -m venv .venv && . .venv/bin/activate
 pip install -e ".[dev]"
 python -m knockon.api            # workbench + API on :8000
 python -m knockon.mcp_server     # MCP server on stdio (what an agent such as Amber connects to)
-pytest                           # 74 tests
+pytest                           # 75 tests
 python -m knockon.evaluate --set dev
 ```
 
@@ -144,7 +144,7 @@ samples/        synthetic packages: dev/, milestone/, final/ (each with labels.j
 scripts/        sample generators and helpers
 eval/results/   recorded evaluation runs (first runs are kept, not overwritten)
 schemas/        JSON Schemas for tool input and output
-tests/          74 tests (units, extraction, every decision branch, MCP, API, regressions)
+tests/          75 tests (units, extraction, every decision branch, MCP, API, regressions)
 docs/           EVAL.md, DATA.md, INPUTS.md, DEMO_SCRIPT.md, PITCH_OUTLINE.md
 ```
 

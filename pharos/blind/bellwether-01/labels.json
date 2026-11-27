@@ -1,0 +1,17 @@
+{
+  "id": "bellwether-01",
+  "package": "bellwether",
+  "kind": "check_submittal",
+  "notes": "Wrong-column trap: Standard-design column differs from Offered column; judge Offered only. 750 vs 1000 deviates; 13,800 complies; 480 complies; Z 5.8 in 5.319..6.181 complies; Dyn11 complies; losses 12.8>12.0 deviates; heaviest 2,500<=2,600 complies.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "deviates",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "complies",
+      "winding_config": "complies",
+      "heat_loss_kw": "deviates",
+      "heaviest_transport_weight_kg": "complies"
+    }
+  }
+}

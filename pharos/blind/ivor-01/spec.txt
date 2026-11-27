@@ -1,0 +1,10 @@
+SECTION 26 12 16 - TRANSFORMER (synthetic test document)
+Project: Ivor Retail Park
+Basis of design (original model): Norbury NB-1000-OEM
+
+Rated power: minimum 1,000 kVA
+Primary voltage: 12,470 V
+Secondary voltage: 208Y/120 V
+Impedance: 5.75 % (tolerance +/-7.5 %)
+Winding connection: delta-wye
+Total losses: maximum 9.5 kW

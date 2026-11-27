@@ -1,0 +1,24 @@
+{
+  "id": "garrow-01",
+  "package": "garrow",
+  "kind": "find_alternatives",
+  "notes": "Original GAR-2000-X excluded. Z band 5.319..6.181. TE-2500-A losses 22.1>20; BF-1600 kVA below min; BF-2000-W wye-wye; OR-2250 Z 6.4 out of band; TE-2000-B 13,200 V primary. OR-2000-D blank losses, MD-2000 blank impedance -> needs confirmation. MD-2500S (2,500 kVA >= min, 19.9<=20, Z 6.0 in band) supported.",
+  "expected": {
+    "supported": [
+      "TE-2000-A",
+      "MD-2500S"
+    ],
+    "falls_short": [
+      "TE-2500-A",
+      "BF-1600",
+      "BF-2000-W",
+      "OR-2250",
+      "TE-2000-B"
+    ],
+    "needs_confirmation": [
+      "OR-2000-D",
+      "MD-2000"
+    ],
+    "none_supported": false
+  }
+}

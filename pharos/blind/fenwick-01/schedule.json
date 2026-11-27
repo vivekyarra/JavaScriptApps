@@ -1,0 +1,27 @@
+{
+  "milestone": {
+    "name": "Energization",
+    "install_test_weeks": 10
+  },
+  "order_release_week": 0,
+  "submittal_approval_weeks": 0,
+  "substituted_item": "T1",
+  "substituted_item_label": "transformer",
+  "items": [
+    {
+      "id": "T1",
+      "name": "Main transformer T1",
+      "baseline_arrival_week": 90,
+      "requires": true
+    },
+    {
+      "id": "SG",
+      "name": "Main switchgear",
+      "vendor": "Switchgear vendor",
+      "requires": true,
+      "arrival_week": 60
+    }
+  ],
+  "alternate_routes": [],
+  "remediation": []
+}

@@ -1,0 +1,17 @@
+{
+  "id": "bellwether-02",
+  "package": "bellwether",
+  "kind": "check_submittal",
+  "notes": "Switchgear. Capability fields are minimums: 1,250>=1,200 complies; main bus 2,000<3,000 deviates; SC 50>=40 complies (peak making current 130 is a distractor); BIL 110>=95 complies; NEMA 1 vs 3R deviates; 15.0 kV exact complies; 60 Hz complies.",
+  "expected": {
+    "verdicts": {
+      "rated_voltage_kv": "complies",
+      "continuous_current_a": "complies",
+      "main_bus_a": "deviates",
+      "short_circuit_ka": "complies",
+      "bil_kv": "complies",
+      "nema_type": "deviates",
+      "frequency_hz": "complies"
+    }
+  }
+}

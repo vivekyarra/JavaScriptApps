@@ -1,0 +1,18 @@
+{
+  "id": "corvane-02",
+  "package": "corvane",
+  "kind": "check_submittal",
+  "notes": "Offered model SG-27-1200. 27 kV ok; 1,200>=1,200; bus 2,000>=2,000; SCCR 16<25 deviates; BIL 125>=125 complies; NEMA 3R ok. No frequency column -> missing.",
+  "offered_model": "SG-27-1200",
+  "expected": {
+    "verdicts": {
+      "rated_voltage_kv": "complies",
+      "continuous_current_a": "complies",
+      "main_bus_a": "complies",
+      "short_circuit_ka": "deviates",
+      "bil_kv": "complies",
+      "nema_type": "complies",
+      "frequency_hz": "missing"
+    }
+  }
+}

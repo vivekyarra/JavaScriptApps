@@ -1,0 +1,10 @@
+SECTION 26 12 00 - TRANSFORMER (synthetic test document)
+Project: Garrow Water Treatment Works
+Basis of design (original model): GAR-2000-X, Garrow Power
+
+Rated power: not less than 2,000 kVA
+Primary voltage: 13,800 V
+Secondary voltage: 480 V
+Impedance: 5.75 % (tolerance +/-7.5 %)
+Winding connection: delta-wye
+Total losses: maximum 20 kW

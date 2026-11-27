@@ -1,0 +1,25 @@
+{
+  "milestone": {
+    "name": "Energization",
+    "install_test_weeks": 12
+  },
+  "order_release_week": 0,
+  "submittal_approval_weeks": 6,
+  "substituted_item": "G1",
+  "substituted_item_label": "generator set",
+  "items": [
+    {
+      "id": "G1",
+      "name": "Generator set G1",
+      "baseline_arrival_week": 70,
+      "requires": true
+    },
+    {
+      "id": "PSWGR",
+      "name": "Paralleling switchgear",
+      "arrival_week": 66,
+      "vendor": "Switchgear vendor",
+      "requires": true
+    }
+  ]
+}

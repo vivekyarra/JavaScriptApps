@@ -1,0 +1,32 @@
+{
+  "id": "f-04-southport",
+  "set": "final",
+  "title": "Southport: documents only (no schedule, no site limits); %Z missing then supplied",
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    }
+  ],
+  "recovery_target_weeks": 6,
+  "revisions": [
+    {
+      "label": "B",
+      "documents": [
+        {
+          "role": "alternate",
+          "path": "alternate_revB.pdf",
+          "revision": "B"
+        }
+      ]
+    }
+  ]
+}

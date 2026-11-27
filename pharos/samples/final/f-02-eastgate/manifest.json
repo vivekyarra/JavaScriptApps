@@ -1,0 +1,28 @@
+{
+  "id": "f-02-eastgate",
+  "set": "final",
+  "title": "Eastgate: conflicting impedance, total mass only, start condition missing",
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    },
+    {
+      "role": "logistics",
+      "path": "logistics.pdf"
+    },
+    {
+      "role": "schedule",
+      "path": "schedule.json"
+    }
+  ],
+  "recovery_target_weeks": 3
+}

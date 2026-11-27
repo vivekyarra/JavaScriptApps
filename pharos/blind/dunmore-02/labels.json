@@ -1,0 +1,18 @@
+{
+  "id": "dunmore-02",
+  "package": "dunmore",
+  "kind": "check_submittal",
+  "notes": "Switchgear, mixed units. 4,300 kg = 9,480 lb > 9,000 lb (4,082 kg) deviates. 3,900 lb <= 4,500 lb complies. SC 31.5<40 deviates. Bus 2,000>=2,000 and BIL 60>=60 comply.",
+  "expected": {
+    "verdicts": {
+      "rated_voltage_kv": "complies",
+      "main_bus_a": "complies",
+      "short_circuit_ka": "deviates",
+      "bil_kv": "complies",
+      "nema_type": "complies",
+      "frequency_hz": "complies",
+      "total_weight_kg": "deviates",
+      "heaviest_transport_weight_kg": "complies"
+    }
+  }
+}

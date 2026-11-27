@@ -1,0 +1,18 @@
+{
+  "id": "eskerhal-01",
+  "package": "eskerhal",
+  "kind": "check_submittal",
+  "notes": "EU thousands separators ('1.600' = 1600, '6.350' kg = 6350). Z 6,3 within 5.4..6.6 complies; Dyn11=delta-wye; losses 16,8<=17,5; weight 6,350>6,200 deviates.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "complies",
+      "winding_config": "complies",
+      "heat_loss_kw": "complies",
+      "total_weight_kg": "deviates",
+      "frequency_hz": "complies"
+    }
+  }
+}

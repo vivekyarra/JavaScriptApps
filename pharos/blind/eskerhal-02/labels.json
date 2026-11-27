@@ -1,0 +1,18 @@
+{
+  "id": "eskerhal-02",
+  "package": "eskerhal",
+  "kind": "check_submittal",
+  "notes": "Weights appear only in numbered notes. Tap range 'up to +/- 2 x 2,5 %' must not be read as primary voltage; 20.000 V complies. Z 5,2 < 5.4 deviates. Total 5.900<=6.000 complies; heaviest 4.150>4.000 deviates; losses 17,1<=17,5.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "deviates",
+      "heat_loss_kw": "complies",
+      "total_weight_kg": "complies",
+      "heaviest_transport_weight_kg": "deviates",
+      "frequency_hz": "complies"
+    }
+  }
+}

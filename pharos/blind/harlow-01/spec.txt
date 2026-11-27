@@ -1,0 +1,9 @@
+TRANSFORMER REQUIREMENTS - Harlow Logistics Hub (synthetic test document)
+Original model (basis of design): HAR-1000-O
+
+Rated power ........ minimum 1,000 kVA
+Primary voltage .... 20 kV
+Secondary voltage .. 0.4 kV
+Impedance .......... 6.0 % +/- 10 %
+Winding ............ Dyn11
+Total losses ....... not more than 11 kW

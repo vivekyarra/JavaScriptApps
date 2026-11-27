@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pharos"
+version = "0.2.0"
+description = "Evidence-linked procurement specialists for Amber: documents to cited facts to deterministic recovery decisions"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = [
+  "mcp>=1.18,<2",
+  "pydantic>=2.10,<3",
+  "pdfplumber>=0.11",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30",
+  "python-multipart>=0.0.9",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pypdf>=4", "reportlab>=4", "pillow>=10", "httpx>=0.27", "python-pptx>=1.0"]
+
+[project.scripts]
+pharos-mcp = "pharos.server:main"
+pharos-api = "pharos.api:main"
+pharos-eval = "pharos.evaluate:main"
+pharos-blind = "pharos.blind_eval:main"
+
+[tool.setuptools.packages.find]
+include = ["pharos*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

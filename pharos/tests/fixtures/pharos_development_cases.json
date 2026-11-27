@@ -1,0 +1,39 @@
+{
+  "purpose": "Synthetic, public development cases for the first Pharos checkpoint. Expected values are test labels, not inputs to the agent or independent blind evaluation results.",
+  "milestone_assumptions": "All readiness weeks share one origin. Work can start when both items are ready. Installation and testing then take two weeks. Both paths have the same calendar. Alternate dates assume timely approvals and a feasible route; the gain is potential, not guaranteed.",
+  "milestone_cases": [
+    {
+      "id": "earlier_transformer_moves_control_to_switchgear",
+      "input": {"original_transformer_ready_week": 82, "alternate_transformer_ready_week": 30, "switchgear_ready_week": 80, "installation_and_testing_weeks": 2, "target_recovery_weeks": 4},
+      "expected": {"baseline_milestone_week": 84, "earliest_alternate_milestone_week": 82, "potential_recovery_weeks": 2, "alternate_controlling_items": ["switchgear"], "target_possible_with_swap_alone": false, "latest_switchgear_ready_week_for_target": 78}
+    },
+    {
+      "id": "switchgear_controls_both_paths",
+      "input": {"original_transformer_ready_week": 82, "alternate_transformer_ready_week": 30, "switchgear_ready_week": 85, "installation_and_testing_weeks": 2, "target_recovery_weeks": 4},
+      "expected": {"baseline_milestone_week": 87, "earliest_alternate_milestone_week": 87, "potential_recovery_weeks": 0, "alternate_controlling_items": ["switchgear"], "target_possible_with_swap_alone": false, "latest_switchgear_ready_week_for_target": 81}
+    },
+    {
+      "id": "target_achievable_with_both_items_ready_in_time",
+      "input": {"original_transformer_ready_week": 82, "alternate_transformer_ready_week": 30, "switchgear_ready_week": 78, "installation_and_testing_weeks": 2, "target_recovery_weeks": 4},
+      "expected": {"baseline_milestone_week": 84, "earliest_alternate_milestone_week": 80, "potential_recovery_weeks": 4, "alternate_controlling_items": ["switchgear"], "target_possible_with_swap_alone": true, "latest_switchgear_ready_week_for_target": 78}
+    }
+  ],
+  "po_slack_case": {
+    "id": "late_po_still_has_slack",
+    "input": {"transformer_ready_week": 82, "switchgear_previous_ready_week": 70, "switchgear_revised_ready_week": 75, "required_joint_handoff_week": 82, "installation_and_testing_weeks": 2, "other_documented_blockers": []},
+    "expected": {"switchgear_slip_weeks": 5, "switchgear_remaining_slack_weeks": 7, "milestone_week_before_update": 84, "milestone_week_after_update": 84, "risk_rank_first": "transformer", "switchgear_schedule_action": "keep_order"}
+  },
+  "elevator_assumptions": "All masses are kg per lift. Additional load includes handling and rigging and all other elevator payload besides the section. Null means undocumented, not zero. A documented gross value covers the complete lift, including any listed additional load. Results apply only to the weight constraint.",
+  "elevator_cases": [
+    {"id": "section_alone_exceeds_limit", "section_kg": 4100, "additional_load_kg": null, "documented_gross_kg": null, "limit_kg": 3600, "expected_weight_status": "exceeds_limit"},
+    {"id": "unknown_rigging_is_not_zero", "section_kg": 2100, "additional_load_kg": null, "documented_gross_kg": null, "limit_kg": 3600, "expected_weight_status": "needs_data"},
+    {"id": "total_load_within_limit", "section_kg": 2100, "additional_load_kg": 350, "documented_gross_kg": null, "limit_kg": 3600, "expected_weight_status": "within_weight_limit"},
+    {"id": "rigging_tips_total_over_limit", "section_kg": 3400, "additional_load_kg": 350, "documented_gross_kg": null, "limit_kg": 3600, "expected_weight_status": "exceeds_limit"},
+    {"id": "gross_already_includes_rigging", "section_kg": 3100, "additional_load_kg": 400, "documented_gross_kg": 3500, "limit_kg": 3600, "expected_weight_status": "within_weight_limit"}
+  ],
+  "arrival_assumptions": "Production starts at approved submittal; transit follows shipment. All intervals use the same calendar and are vendor-quoted bounds, not percentiles.",
+  "arrival_cases": [
+    {"id": "approval_dated", "approval_week": 6, "quoted_production_weeks": [22, 24], "transit_weeks": 2, "expected_onsite_week_range": [30, 32]},
+    {"id": "approval_undated", "approval_week": null, "quoted_production_weeks": [22, 24], "transit_weeks": 2, "expected_onsite_week_range": null, "expected_weeks_after_approval": [24, 26], "request": "approval date"}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "eskerhal-03",
+  "package": "eskerhal",
+  "kind": "check_submittal",
+  "notes": "Submittal states rated power twice (1.250 kVA and 1.000 kVA) and impedance twice (6,0 and 6,4) -> conflicting for both (even though both impedances are in band). Other fields stated once and comply.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "conflicting",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "conflicting",
+      "heat_loss_kw": "complies",
+      "total_weight_kg": "complies"
+    }
+  }
+}

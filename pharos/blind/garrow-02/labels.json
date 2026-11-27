@@ -1,0 +1,23 @@
+{
+  "id": "garrow-02",
+  "package": "garrow",
+  "kind": "find_alternatives",
+  "notes": "Exact 1,500 kVA required (NV-2000 falls short). Z band 5.4..6.6: NV-1500-B 6.8 out, KR-1500E 6.2 in band but loss 13.4>13.0 short. KR-1500 loss exactly 13.0 meets 'maximum'. Blank secondary (LM-1500) / blank winding (LM-1500D) -> needs confirmation. PX-1500 primary 13,800 short.",
+  "expected": {
+    "supported": [
+      "NV-1500-A",
+      "KR-1500"
+    ],
+    "falls_short": [
+      "NV-1500-B",
+      "NV-2000",
+      "KR-1500E",
+      "PX-1500"
+    ],
+    "needs_confirmation": [
+      "LM-1500",
+      "LM-1500D"
+    ],
+    "none_supported": false
+  }
+}

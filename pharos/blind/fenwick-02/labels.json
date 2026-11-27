@@ -1,0 +1,11 @@
+{
+  "id": "fenwick-02",
+  "package": "fenwick",
+  "kind": "decide",
+  "notes": "Distinction no vs no_not_alone: substitute's own ceiling (88-40=48) exceeds target, switchgear is what limits. UNSURE whether grader would call this no_not_alone or no.",
+  "expected": {
+    "answer": "no_not_alone",
+    "max_recoverable_weeks": 14,
+    "reason": "Baseline milestone = max(88,74)+12 = 100. Alternate T1 ready week 40 (280 days) but switchgear at 74 binds: milestone 86, recovered 14 < 26. Substitute alone would give up to 48 weeks, but switchgear caps it and no expedite is stated."
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "$defs": {
+    "Candidate": {
+      "properties": {
+        "manufacturer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Manufacturer"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "verdict": {
+          "enum": [
+            "supported",
+            "needs_confirmation",
+            "falls_short"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "library_document": {
+          "title": "Library Document",
+          "type": "string"
+        },
+        "library_ref": {
+          "title": "Library Ref",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/RequirementCheck"
+          },
+          "title": "Requirements",
+          "type": "array"
+        },
+        "matched": {
+          "default": 0,
+          "title": "Matched",
+          "type": "integer"
+        },
+        "shortfalls": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Shortfalls",
+          "type": "array"
+        },
+        "open_points": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Open Points",
+          "type": "array"
+        },
+        "lead_time_weeks": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lead Time Weeks"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "verdict",
+        "library_document",
+        "library_ref",
+        "requirements"
+      ],
+      "title": "Candidate",
+      "type": "object"
+    },
+    "Evidence": {
+      "description": "A resolvable pointer to the exact place a value came from.",
+      "properties": {
+        "document": {
+          "title": "Document",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "default": true,
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document",
+        "role",
+        "sha256",
+        "page",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "RequirementCheck": {
+      "description": "One buyer requirement against what the supplier's submittal establishes, with both sides cited.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "requirement": {
+          "default": null,
+          "title": "Requirement"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "basis": {
+          "title": "Basis",
+          "type": "string"
+        },
+        "submittal_value": {
+          "default": null,
+          "title": "Submittal Value"
+        },
+        "verdict": {
+          "enum": [
+            "complies",
+            "deviates",
+            "missing",
+            "unreadable",
+            "conflicting"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "requirement_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Requirement Evidence",
+          "type": "array"
+        },
+        "submittal_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Submittal Evidence",
+          "type": "array"
+        },
+        "searched": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Searched"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "label",
+        "basis",
+        "verdict"
+      ],
+      "title": "RequirementCheck",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Case Id"
+    },
+    "equipment_type": {
+      "title": "Equipment Type",
+      "type": "string"
+    },
+    "requirements_used": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Requirements Used",
+      "type": "array"
+    },
+    "library_documents": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Library Documents",
+      "type": "array"
+    },
+    "manufacturers_considered": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Manufacturers Considered",
+      "type": "array"
+    },
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/Candidate"
+      },
+      "title": "Candidates",
+      "type": "array"
+    },
+    "none_supported": {
+      "title": "None Supported",
+      "type": "boolean"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "notice": {
+      "default": "A library listing is not stock, an offer or a certified equivalent. Candidates are proposals to verify: each needs a supplier submittal for the exact configuration, checked with check_submittal.",
+      "title": "Notice",
+      "type": "string"
+    }
+  },
+  "required": [
+    "equipment_type",
+    "requirements_used",
+    "library_documents",
+    "manufacturers_considered",
+    "candidates",
+    "none_supported",
+    "summary"
+  ],
+  "title": "AlternativesResult",
+  "type": "object"
+}

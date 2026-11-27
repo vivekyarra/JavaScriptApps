@@ -1,0 +1,11 @@
+{
+  "id": "kestrel-01",
+  "package": "kestrel",
+  "kind": "decide",
+  "notes": "6 months*4.345=26.07 -> 27 weeks as stated in the document. Non-required spare breaker (week 120) must be ignored.",
+  "expected": {
+    "answer": "yes",
+    "max_recoverable_weeks": 49,
+    "reason": "Baseline milestone max(104,55)+16 = 120 (spare breaker is not required). Alternate lead 27 weeks, switchgear 55 binds: milestone 71. Recovered 49 >= 40."
+  }
+}

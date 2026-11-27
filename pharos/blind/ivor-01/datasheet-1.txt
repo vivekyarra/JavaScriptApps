@@ -1,0 +1,7 @@
+DATASHEET - Ivor Transformers IV-1000 (fictional)
+Rating: 1,000 kVA
+High voltage: 12,470 V
+Low voltage: 208Y/120 V
+Impedance: 5.8 %
+Connection: Dyn11
+Total losses: 9.1 kW

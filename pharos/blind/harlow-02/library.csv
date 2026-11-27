@@ -1,0 +1,10 @@
+manufacturer,model,rated_kva,primary_voltage_v,secondary_voltage_v,impedance_pct,winding_config,heat_loss_kw,lead_time_weeks
+Harlow,HAR-5000-A,5000,69000,13800,7.5,wye-delta,36.0,70
+Quill,QL-5000,5000,69000,13800,7.5,wye-delta,36.5,48
+Quill,QL-5000H,5000,69000,13800,7.5,wye-delta,39.0,48
+Quill,QL-6300,6300,69000,13800,7.5,wye-delta,37.9,52
+Rowan,RW-5000,5000,69000,13800,7.2,wye-delta,35.0,44
+Rowan,RW-5000Z,5000,69000,13800,,wye-delta,35.0,44
+Sable,SB-4000,4000,69000,13800,7.5,wye-delta,30.0,40
+Sable,SB-5000D,5000,69000,13800,7.5,delta-wye,37.0,46
+Tern,TR-5000,5000,66000,13800,7.5,wye-delta,36.0,50

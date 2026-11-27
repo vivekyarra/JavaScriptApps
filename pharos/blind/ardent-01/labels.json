@@ -1,0 +1,19 @@
+{
+  "id": "ardent-01",
+  "package": "ardent",
+  "kind": "check_submittal",
+  "notes": "Key-value sheets. 12.47 kV = 12,470 V (complies). Z 5.9 within 5.75*(1+-0.075)=5.319..6.181. Losses 13.2<=14.0. Total weight 5,350 > max 5,200 (deviates). Heaviest 3,050<=3,100.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "complies",
+      "winding_config": "complies",
+      "heat_loss_kw": "complies",
+      "total_weight_kg": "deviates",
+      "heaviest_transport_weight_kg": "complies",
+      "frequency_hz": "complies"
+    }
+  }
+}

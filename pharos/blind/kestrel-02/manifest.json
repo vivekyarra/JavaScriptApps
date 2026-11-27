@@ -1,0 +1,28 @@
+{
+  "id": "kestrel-02",
+  "set": "blind",
+  "title": "Kestrel 02: alternate not fast enough",
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    },
+    {
+      "role": "logistics",
+      "path": "logistics.pdf"
+    },
+    {
+      "role": "schedule",
+      "path": "schedule.json"
+    }
+  ],
+  "recovery_target_weeks": 24
+}

@@ -1,0 +1,9 @@
+SECTION 26 12 00 - MEDIUM VOLTAGE TRANSFORMER (synthetic test document)
+Project: Ardent Quarry Crusher Plant
+
+Rated power: minimum 2,000 kVA
+Primary voltage: 34,500 V
+Secondary voltage: 4,160 V
+Impedance: 6.5 % (no tolerance permitted)
+Winding connection: delta-wye
+Total losses: shall not exceed 18.0 kW (no-load loss plus load loss at rated load)

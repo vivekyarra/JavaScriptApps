@@ -1,0 +1,18 @@
+{
+  "id": "corvane-01",
+  "package": "corvane",
+  "kind": "check_submittal",
+  "notes": "Multi-model catalogue; offered model CV-2000-LL (neighbouring rows are distractors). 2,000 kVA complies; 13,800; 480; Z 6.5 > 6.181 deviates; Dyn11 complies; loss 15.2<=20 complies; mass 7,300>7,000 deviates.",
+  "offered_model": "CV-2000-LL",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "deviates",
+      "winding_config": "complies",
+      "heat_loss_kw": "complies",
+      "total_weight_kg": "deviates"
+    }
+  }
+}

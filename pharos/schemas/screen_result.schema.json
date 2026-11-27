@@ -1,0 +1,236 @@
+{
+  "$defs": {
+    "Evidence": {
+      "description": "A resolvable pointer to the exact place a value came from.",
+      "properties": {
+        "document": {
+          "title": "Document",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "default": true,
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document",
+        "role",
+        "sha256",
+        "page",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Finding": {
+      "properties": {
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "topic": {
+          "enum": [
+            "physical",
+            "electrical",
+            "specification",
+            "schedule"
+          ],
+          "title": "Topic",
+          "type": "string"
+        },
+        "label": {
+          "enum": [
+            "conclusive",
+            "cleared",
+            "needs_engineer",
+            "not_stated",
+            "could_not_read"
+          ],
+          "title": "Label",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "constraint": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Constraint"
+        },
+        "requirement_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Requirement Evidence",
+          "type": "array"
+        },
+        "supplier_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Supplier Evidence",
+          "type": "array"
+        },
+        "formula": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formula"
+        },
+        "computed": {
+          "additionalProperties": true,
+          "title": "Computed",
+          "type": "object"
+        },
+        "scope_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope Note"
+        },
+        "follow_up": {
+          "$ref": "#/$defs/FollowUp"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "key",
+        "topic",
+        "label",
+        "title",
+        "summary"
+      ],
+      "title": "Finding",
+      "type": "object"
+    },
+    "FollowUp": {
+      "properties": {
+        "kind": {
+          "enum": [
+            "vendor",
+            "engineer",
+            "readable_copy",
+            "route",
+            "none"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Question"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "FollowUp",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Case Id"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "missing_project_facts": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Project Facts",
+      "type": "array"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "findings",
+    "missing_project_facts",
+    "summary"
+  ],
+  "title": "ScreenResult",
+  "type": "object"
+}

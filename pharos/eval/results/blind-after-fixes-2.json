@@ -1,0 +1,1201 @@
+{
+  "label": "after-fixes-2",
+  "ran_at": "2026-11-27T15:49:59Z",
+  "fingerprint": {
+    "files": {
+      "__init__.py": "c883481393f913d4",
+      "api.py": "5930229ef1b41875",
+      "blind_eval.py": "8deb2fd1bdf4975b",
+      "checks.py": "5ad9608eea92ba89",
+      "compare.py": "a86db09b63434da3",
+      "context.py": "2d0d233da4d9c568",
+      "core.py": "c1d6546aa770d731",
+      "decide.py": "9639bea1d2bf137a",
+      "discovery.py": "6b216b84b9707409",
+      "evaluate.py": "283b990627879b23",
+      "extract.py": "917ac7237501bd17",
+      "ingest.py": "779662f7a6df3300",
+      "llm_extract.py": "53a4967ce115a362",
+      "mcp_server.py": "88228c78ba0c3e25",
+      "schedule.py": "2061b229f5b68f76",
+      "schemas.py": "484da600d55b48fc",
+      "screen.py": "1ff6349a42e9fa9f",
+      "server.py": "d3a79cf1985b14c5",
+      "store.py": "80a21349e43da0a8",
+      "tables.py": "029acefada9f8f97",
+      "units.py": "c7e406ae6751a260"
+    },
+    "commit": "6e9ca01",
+    "source_clean": true
+  },
+  "totals": {
+    "scenarios": 27,
+    "scenarios_ok": 20,
+    "items": 135,
+    "items_ok": 126
+  },
+  "by_kind": {
+    "check_submittal": {
+      "scenarios": 13,
+      "scenarios_ok": 12,
+      "items": 95,
+      "items_ok": 93
+    },
+    "decide": {
+      "scenarios": 8,
+      "scenarios_ok": 3,
+      "items": 16,
+      "items_ok": 10
+    },
+    "find_alternatives": {
+      "scenarios": 6,
+      "scenarios_ok": 5,
+      "items": 24,
+      "items_ok": 23
+    }
+  },
+  "by_package": {
+    "ardent": {
+      "scenarios": 3,
+      "scenarios_ok": 3,
+      "items": 23,
+      "items_ok": 23
+    },
+    "bellwether": {
+      "scenarios": 2,
+      "scenarios_ok": 2,
+      "items": 14,
+      "items_ok": 14
+    },
+    "corvane": {
+      "scenarios": 2,
+      "scenarios_ok": 2,
+      "items": 14,
+      "items_ok": 14
+    },
+    "dunmore": {
+      "scenarios": 2,
+      "scenarios_ok": 2,
+      "items": 16,
+      "items_ok": 16
+    },
+    "eskerhal": {
+      "scenarios": 4,
+      "scenarios_ok": 3,
+      "items": 28,
+      "items_ok": 26
+    },
+    "fenwick": {
+      "scenarios": 4,
+      "scenarios_ok": 2,
+      "items": 8,
+      "items_ok": 6
+    },
+    "garrow": {
+      "scenarios": 3,
+      "scenarios_ok": 3,
+      "items": 12,
+      "items_ok": 12
+    },
+    "harlow": {
+      "scenarios": 2,
+      "scenarios_ok": 2,
+      "items": 8,
+      "items_ok": 8
+    },
+    "ivor": {
+      "scenarios": 1,
+      "scenarios_ok": 0,
+      "items": 4,
+      "items_ok": 3
+    },
+    "kestrel": {
+      "scenarios": 4,
+      "scenarios_ok": 1,
+      "items": 8,
+      "items_ok": 4
+    }
+  },
+  "scenarios": [
+    {
+      "id": "ardent-01",
+      "package": "ardent",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 9,
+      "items": 9,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "heaviest_transport_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "ardent-02",
+      "package": "ardent",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 6,
+      "items": 6,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "ardent-03",
+      "package": "ardent",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 8,
+      "items": 8,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "missing",
+          "got": "missing",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "missing",
+          "got": "missing",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heaviest_transport_weight_kg": {
+          "expected": "missing",
+          "got": "missing",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "bellwether-01",
+      "package": "bellwether",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 7,
+      "items": 7,
+      "checks": {
+        "rated_kva": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "heaviest_transport_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "bellwether-02",
+      "package": "bellwether",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 7,
+      "items": 7,
+      "checks": {
+        "rated_voltage_kv": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "continuous_current_a": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "main_bus_a": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "short_circuit_ka": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "bil_kv": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "nema_type": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "corvane-01",
+      "package": "corvane",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 7,
+      "items": 7,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "corvane-02",
+      "package": "corvane",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 7,
+      "items": 7,
+      "checks": {
+        "rated_voltage_kv": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "continuous_current_a": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "main_bus_a": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "short_circuit_ka": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "bil_kv": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "nema_type": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "missing",
+          "got": "missing",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "dunmore-01",
+      "package": "dunmore",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 8,
+      "items": 8,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heaviest_transport_weight_kg": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "dunmore-02",
+      "package": "dunmore",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 8,
+      "items": 8,
+      "checks": {
+        "rated_voltage_kv": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "main_bus_a": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "short_circuit_ka": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "bil_kv": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "nema_type": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "heaviest_transport_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "eskerhal-01",
+      "package": "eskerhal",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 8,
+      "items": 8,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "eskerhal-02",
+      "package": "eskerhal",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 8,
+      "items": 8,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "heaviest_transport_weight_kg": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "frequency_hz": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "eskerhal-03",
+      "package": "eskerhal",
+      "kind": "check_submittal",
+      "scenario_ok": true,
+      "items_ok": 6,
+      "items": 6,
+      "checks": {
+        "rated_kva": {
+          "expected": "conflicting",
+          "got": "conflicting",
+          "ok": true
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "secondary_voltage_v": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "conflicting",
+          "got": "conflicting",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        },
+        "total_weight_kg": {
+          "expected": "complies",
+          "got": "complies",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "eskerhal-04",
+      "package": "eskerhal",
+      "kind": "check_submittal",
+      "scenario_ok": false,
+      "items_ok": 4,
+      "items": 6,
+      "checks": {
+        "rated_kva": {
+          "expected": "complies",
+          "got": "unreadable",
+          "ok": false
+        },
+        "primary_voltage_v": {
+          "expected": "complies",
+          "got": "unreadable",
+          "ok": false
+        },
+        "secondary_voltage_v": {
+          "expected": "deviates",
+          "got": "deviates",
+          "ok": true
+        },
+        "impedance_pct": {
+          "expected": "unreadable",
+          "got": "unreadable",
+          "ok": true
+        },
+        "winding_config": {
+          "expected": "unreadable",
+          "got": "unreadable",
+          "ok": true
+        },
+        "heat_loss_kw": {
+          "expected": "unreadable",
+          "got": "unreadable",
+          "ok": true
+        }
+      },
+      "unlabeled_fields_reported": []
+    },
+    {
+      "id": "fenwick-01",
+      "package": "fenwick",
+      "kind": "decide",
+      "scenario_ok": false,
+      "items_ok": 1,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "yes",
+          "got": "only_if",
+          "ok": false
+        },
+        "max_recoverable_weeks": {
+          "expected": 30,
+          "got": 30.0,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "fenwick-02",
+      "package": "fenwick",
+      "kind": "decide",
+      "scenario_ok": true,
+      "items_ok": 2,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "no_not_alone",
+          "got": "no_not_alone",
+          "ok": true
+        },
+        "max_recoverable_weeks": {
+          "expected": 14,
+          "got": 14.0,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "fenwick-03",
+      "package": "fenwick",
+      "kind": "decide",
+      "scenario_ok": false,
+      "items_ok": 1,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "only_if",
+          "got": "only_if",
+          "ok": true
+        },
+        "max_recoverable_weeks": {
+          "expected": 36,
+          "got": 33.0,
+          "ok": false
+        }
+      }
+    },
+    {
+      "id": "fenwick-04",
+      "package": "fenwick",
+      "kind": "decide",
+      "scenario_ok": true,
+      "items_ok": 2,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "needs_data",
+          "got": "needs_data",
+          "ok": true
+        },
+        "max_recoverable_weeks": {
+          "expected": null,
+          "got": null,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "garrow-01",
+      "package": "garrow",
+      "kind": "find_alternatives",
+      "scenario_ok": true,
+      "items_ok": 4,
+      "items": 4,
+      "checks": {
+        "supported": {
+          "expected": [
+            "MD-2500S",
+            "TE-2000-A"
+          ],
+          "got": [
+            "MD-2500S",
+            "TE-2000-A"
+          ],
+          "ok": true
+        },
+        "falls_short": {
+          "expected": [
+            "BF-1600",
+            "BF-2000-W",
+            "OR-2250",
+            "TE-2000-B",
+            "TE-2500-A"
+          ],
+          "got": [
+            "BF-1600",
+            "BF-2000-W",
+            "OR-2250",
+            "TE-2000-B",
+            "TE-2500-A"
+          ],
+          "ok": true
+        },
+        "needs_confirmation": {
+          "expected": [
+            "MD-2000",
+            "OR-2000-D"
+          ],
+          "got": [
+            "MD-2000",
+            "OR-2000-D"
+          ],
+          "ok": true
+        },
+        "none_supported": {
+          "expected": false,
+          "got": false,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "garrow-02",
+      "package": "garrow",
+      "kind": "find_alternatives",
+      "scenario_ok": true,
+      "items_ok": 4,
+      "items": 4,
+      "checks": {
+        "supported": {
+          "expected": [
+            "KR-1500",
+            "NV-1500-A"
+          ],
+          "got": [
+            "KR-1500",
+            "NV-1500-A"
+          ],
+          "ok": true
+        },
+        "falls_short": {
+          "expected": [
+            "KR-1500E",
+            "NV-1500-B",
+            "NV-2000",
+            "PX-1500"
+          ],
+          "got": [
+            "KR-1500E",
+            "NV-1500-B",
+            "NV-2000",
+            "PX-1500"
+          ],
+          "ok": true
+        },
+        "needs_confirmation": {
+          "expected": [
+            "LM-1500",
+            "LM-1500D"
+          ],
+          "got": [
+            "LM-1500",
+            "LM-1500D"
+          ],
+          "ok": true
+        },
+        "none_supported": {
+          "expected": false,
+          "got": false,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "garrow-03",
+      "package": "garrow",
+      "kind": "find_alternatives",
+      "scenario_ok": true,
+      "items_ok": 4,
+      "items": 4,
+      "checks": {
+        "supported": {
+          "expected": [],
+          "got": [],
+          "ok": true
+        },
+        "falls_short": {
+          "expected": [
+            "BF-3000-W",
+            "MD-3000-V",
+            "MD-3000-Z",
+            "OR-2500",
+            "OR-3750",
+            "TE-3000-A"
+          ],
+          "got": [
+            "BF-3000-W",
+            "MD-3000-V",
+            "MD-3000-Z",
+            "OR-2500",
+            "OR-3750",
+            "TE-3000-A"
+          ],
+          "ok": true
+        },
+        "needs_confirmation": {
+          "expected": [],
+          "got": [],
+          "ok": true
+        },
+        "none_supported": {
+          "expected": true,
+          "got": true,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "harlow-01",
+      "package": "harlow",
+      "kind": "find_alternatives",
+      "scenario_ok": true,
+      "items_ok": 4,
+      "items": 4,
+      "checks": {
+        "supported": {
+          "expected": [
+            "VS-1000",
+            "VS-1250"
+          ],
+          "got": [
+            "VS-1000",
+            "VS-1250"
+          ],
+          "ok": true
+        },
+        "falls_short": {
+          "expected": [
+            "CD-1000",
+            "CD-1000L",
+            "IS-1600",
+            "NB-1000",
+            "VS-800"
+          ],
+          "got": [
+            "CD-1000",
+            "CD-1000L",
+            "IS-1600",
+            "NB-1000",
+            "VS-800"
+          ],
+          "ok": true
+        },
+        "needs_confirmation": {
+          "expected": [
+            "IS-1000X",
+            "NB-1000S"
+          ],
+          "got": [
+            "IS-1000X",
+            "NB-1000S"
+          ],
+          "ok": true
+        },
+        "none_supported": {
+          "expected": false,
+          "got": false,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "harlow-02",
+      "package": "harlow",
+      "kind": "find_alternatives",
+      "scenario_ok": true,
+      "items_ok": 4,
+      "items": 4,
+      "checks": {
+        "supported": {
+          "expected": [
+            "QL-5000",
+            "QL-6300"
+          ],
+          "got": [
+            "QL-5000",
+            "QL-6300"
+          ],
+          "ok": true
+        },
+        "falls_short": {
+          "expected": [
+            "QL-5000H",
+            "RW-5000",
+            "SB-4000",
+            "SB-5000D",
+            "TR-5000"
+          ],
+          "got": [
+            "QL-5000H",
+            "RW-5000",
+            "SB-4000",
+            "SB-5000D",
+            "TR-5000"
+          ],
+          "ok": true
+        },
+        "needs_confirmation": {
+          "expected": [
+            "RW-5000Z"
+          ],
+          "got": [
+            "RW-5000Z"
+          ],
+          "ok": true
+        },
+        "none_supported": {
+          "expected": false,
+          "got": false,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "ivor-01",
+      "package": "ivor",
+      "kind": "find_alternatives",
+      "scenario_ok": false,
+      "items_ok": 3,
+      "items": 4,
+      "checks": {
+        "supported": {
+          "expected": [
+            "IV-1000"
+          ],
+          "got": [
+            "IV-1000"
+          ],
+          "ok": true
+        },
+        "falls_short": {
+          "expected": [
+            "IV-1250",
+            "IV-1500",
+            "IV-750"
+          ],
+          "got": [
+            "IV-1250",
+            "IV-1500",
+            "IV-750"
+          ],
+          "ok": true
+        },
+        "needs_confirmation": {
+          "expected": [
+            "IV-1000M"
+          ],
+          "got": [
+            ""
+          ],
+          "ok": false
+        },
+        "none_supported": {
+          "expected": false,
+          "got": false,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "kestrel-01",
+      "package": "kestrel",
+      "kind": "decide",
+      "scenario_ok": false,
+      "items_ok": 1,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "yes",
+          "got": "only_if",
+          "ok": false
+        },
+        "max_recoverable_weeks": {
+          "expected": 49,
+          "got": 49.0,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "kestrel-02",
+      "package": "kestrel",
+      "kind": "decide",
+      "scenario_ok": true,
+      "items_ok": 2,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "no",
+          "got": "no",
+          "ok": true
+        },
+        "max_recoverable_weeks": {
+          "expected": 12,
+          "got": 12.0,
+          "ok": true
+        }
+      }
+    },
+    {
+      "id": "kestrel-03",
+      "package": "kestrel",
+      "kind": "decide",
+      "scenario_ok": false,
+      "items_ok": 0,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "only_if",
+          "got": "no_not_alone",
+          "ok": false
+        },
+        "max_recoverable_weeks": {
+          "expected": 40,
+          "got": 20.0,
+          "ok": false
+        }
+      }
+    },
+    {
+      "id": "kestrel-04",
+      "package": "kestrel",
+      "kind": "decide",
+      "scenario_ok": false,
+      "items_ok": 1,
+      "items": 2,
+      "checks": {
+        "answer": {
+          "expected": "only_if",
+          "got": "only_if",
+          "ok": true
+        },
+        "max_recoverable_weeks": {
+          "expected": 42,
+          "got": 38.0,
+          "ok": false
+        }
+      }
+    }
+  ]
+}

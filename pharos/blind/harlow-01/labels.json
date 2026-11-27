@@ -1,0 +1,24 @@
+{
+  "id": "harlow-01",
+  "package": "harlow",
+  "kind": "find_alternatives",
+  "notes": "Unit conversion: 20 kV=20,000 V, 0.4 kV=400 V; Dyn11=delta-wye. Z band 5.4..6.6: VS-1250 5.5 in band; IS-1600 5.2 out. CD-1000 420 V; CD-1000L loss 11.5>11; VS-800 below min; NB-1000 delta-delta short. IS-1000X blank losses and NB-1000S blank primary -> needs confirmation. Original excluded.",
+  "expected": {
+    "supported": [
+      "VS-1000",
+      "VS-1250"
+    ],
+    "falls_short": [
+      "VS-800",
+      "CD-1000",
+      "CD-1000L",
+      "IS-1600",
+      "NB-1000"
+    ],
+    "needs_confirmation": [
+      "IS-1000X",
+      "NB-1000S"
+    ],
+    "none_supported": false
+  }
+}

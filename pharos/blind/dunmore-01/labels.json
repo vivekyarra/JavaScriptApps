@@ -1,0 +1,18 @@
+{
+  "id": "dunmore-01",
+  "package": "dunmore",
+  "kind": "check_submittal",
+  "notes": "Unit conversions. 13.2 kV=13,200 V. Z 5.2 < 5.319 deviates. 14,200 W=14.2 kW<=15. 4.9 short tons=9,800 lb (4,445 kg) <= 10,000 lb (4,536 kg) complies (reading as metric tonnes would wrongly deviate). 3,300 kg = 7,275 lb > 7,000 lb (3,175 kg) deviates.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "deviates",
+      "winding_config": "complies",
+      "heat_loss_kw": "complies",
+      "total_weight_kg": "complies",
+      "heaviest_transport_weight_kg": "deviates"
+    }
+  }
+}

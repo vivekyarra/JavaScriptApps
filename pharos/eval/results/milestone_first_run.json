@@ -1,0 +1,365 @@
+{
+  "set": "milestone",
+  "summary": {
+    "packages": 2,
+    "fields_correct": "58/72",
+    "read_status_calls_correct": "60/72",
+    "findings_correct": "2/11",
+    "false_positive_findings": 5,
+    "electrical_clearances_issued": 0,
+    "decision_checks_passed": "12/12",
+    "revision_checks_passed": "7/10",
+    "calibration": [
+      {
+        "confidence": "0.6-0.79",
+        "n": 4,
+        "correct": 3,
+        "accuracy": 0.75
+      },
+      {
+        "confidence": "<0.6",
+        "n": 1,
+        "correct": 1,
+        "accuracy": 1.0
+      },
+      {
+        "confidence": ">=0.8",
+        "n": 35,
+        "correct": 33,
+        "accuracy": 0.943
+      }
+    ],
+    "mean_runtime_s": 0.177
+  },
+  "results": [
+    {
+      "package": "m-01-harbor",
+      "set": "milestone",
+      "fields": {
+        "total": 36,
+        "correct": 28,
+        "status_total": 36,
+        "status_correct": 29,
+        "misses": [
+          {
+            "role": "alternate",
+            "field": "primary_voltage_v",
+            "expected": {
+              "status": "documented",
+              "value": 12470
+            },
+            "got": {
+              "status": "documented",
+              "value": 480.0
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "secondary_voltage_v",
+            "expected": {
+              "status": "documented",
+              "value": 480
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "impedance_pct",
+            "expected": {
+              "status": "documented",
+              "value": 6.0
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "winding_config",
+            "expected": {
+              "status": "documented",
+              "value": "delta-wye"
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "dimensions_mm",
+            "expected": {
+              "status": "documented",
+              "value": [
+                1498.6,
+                2108.2,
+                2209.8
+              ]
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "heaviest_transport_weight_kg",
+            "expected": {
+              "status": "documented",
+              "value": 4100.4
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "total_weight_kg",
+            "expected": {
+              "status": "documented",
+              "value": 6713.2
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "heat_loss_kw",
+            "expected": {
+              "status": "documented",
+              "value": 11.9
+            },
+            "got": {
+              "status": "not_stated",
+              "value": null
+            }
+          }
+        ]
+      },
+      "findings": {
+        "expected": 5,
+        "correct": 0,
+        "false_positive_findings": [
+          "spec:primary_voltage",
+          "spec:secondary_voltage",
+          "spec:winding"
+        ],
+        "wrong": [
+          {
+            "key": "weight:elevator",
+            "expected": "conclusive",
+            "got": "not_stated"
+          },
+          {
+            "key": "weight:slab",
+            "expected": "conclusive",
+            "got": "not_stated"
+          },
+          {
+            "key": "dims:door",
+            "expected": "cleared",
+            "got": null
+          },
+          {
+            "key": "heat:cooling",
+            "expected": "cleared",
+            "got": null
+          },
+          {
+            "key": "electrical:impedance",
+            "expected": "needs_engineer",
+            "got": "not_stated"
+          }
+        ],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.108,
+        "screen": 0.049,
+        "decide": 0.055
+      },
+      "answer": "no_not_alone",
+      "headline": "No, not from the transformer swap alone. The alternate ships 25 weeks earlier, but Switchgear lineup SG-1 is still due in week 72. Against the week-72 baseline, the most this swap can recover is 0 weeks, assuming the conclusive deviation is resolved and installation and testing durations are unchanged. To recover 3 weeks, Switchgear lineup SG-1 must also be ready by week 69.",
+      "revision_runtime_s": 0.063,
+      "revision": {
+        "checks": {
+          "changed:weight:elevator": false,
+          "still_open:electrical:impedance": true,
+          "milestone_moved": true,
+          "answer_after": true
+        },
+        "passed": 3,
+        "total": 4
+      },
+      "revision_headline": "No, not from the transformer swap alone. The alternate ships 25 weeks earlier, but Switchgear lineup SG-1 is still due in week 72. Against the week-72 baseline, the most this swap can recover is 0 weeks, assuming the conclusive deviation is resolved and installation and testing durations are unchanged. To recover 3 weeks, Switchgear lineup SG-1 must also be ready by week 69."
+    },
+    {
+      "package": "m-02-meridian",
+      "set": "milestone",
+      "fields": {
+        "total": 36,
+        "correct": 30,
+        "status_total": 36,
+        "status_correct": 31,
+        "misses": [
+          {
+            "role": "original",
+            "field": "heat_loss_kw",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "documented",
+              "value": 13.7
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "primary_voltage_v",
+            "expected": {
+              "status": "documented",
+              "value": 13800
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "secondary_voltage_v",
+            "expected": {
+              "status": "documented",
+              "value": 480
+            },
+            "got": {
+              "status": "documented",
+              "value": 13800.0
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "impedance_pct",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "dimensions_mm",
+            "expected": {
+              "status": "documented",
+              "value": [
+                1420,
+                2050,
+                2150
+              ]
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          },
+          {
+            "role": "alternate",
+            "field": "shipping_total_weight_kg",
+            "expected": {
+              "status": "not_stated"
+            },
+            "got": {
+              "status": "could_not_read",
+              "value": null
+            }
+          }
+        ]
+      },
+      "findings": {
+        "expected": 6,
+        "correct": 2,
+        "false_positive_findings": [
+          "spec:primary_voltage",
+          "spec:secondary_voltage"
+        ],
+        "wrong": [
+          {
+            "key": "weight:slab",
+            "expected": "could_not_read",
+            "got": null
+          },
+          {
+            "key": "dims:door",
+            "expected": "cleared",
+            "got": "could_not_read"
+          },
+          {
+            "key": "dims:ceiling",
+            "expected": "cleared",
+            "got": "could_not_read"
+          },
+          {
+            "key": "electrical:impedance",
+            "expected": "not_stated",
+            "got": "could_not_read"
+          }
+        ],
+        "electrical_clearance_issued": []
+      },
+      "decision": {
+        "checks": {
+          "answer": true,
+          "baseline_week": true,
+          "max_recoverable_weeks": true,
+          "weeks_earlier_alternate_ships": true,
+          "controlling_item_alternate": true,
+          "requirements": true
+        },
+        "passed": 6,
+        "total": 6
+      },
+      "runtime_s": {
+        "compare": 0.05,
+        "screen": 0.046,
+        "decide": 0.046
+      },
+      "answer": "only_if",
+      "headline": "Only if the conclusive deviation is resolved and the open items are resolved without adding time (Heaviest shipping section: could not read; Overall dimensions: could not read; Overall dimensions: could not read; Heat loss: could not read; Impedance (%Z): could not read; Primary voltage: could not read). The most this swap can recover is 28 weeks against a 20-week target.",
+      "revision_runtime_s": 0.054,
+      "revision": {
+        "checks": {
+          "changed:weight:elevator": true,
+          "changed:weight:slab": false,
+          "changed:heat:cooling": true,
+          "removed:electrical:impedance": true,
+          "milestone_moved": true,
+          "answer_after": false
+        },
+        "passed": 4,
+        "total": 6
+      },
+      "revision_headline": "Only if the conclusive deviation is resolved and the open items are resolved without adding time (Overall dimensions: not stated; Overall dimensions: not stated; Primary voltage: not stated). The most this swap can recover is 28 weeks against a 20-week target."
+    }
+  ]
+}

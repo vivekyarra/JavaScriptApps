@@ -1,0 +1,194 @@
+{
+  "$defs": {
+    "DocumentInput": {
+      "properties": {
+        "role": {
+          "enum": [
+            "spec",
+            "original",
+            "alternate",
+            "logistics",
+            "schedule",
+            "library"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "content_base64": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Base64"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        }
+      },
+      "required": [
+        "role"
+      ],
+      "title": "DocumentInput",
+      "type": "object"
+    }
+  },
+  "description": "What a caller sends to any of the three tools.",
+  "properties": {
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Case Id"
+    },
+    "package_dir": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Package Dir"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentInput"
+      },
+      "title": "Documents",
+      "type": "array"
+    },
+    "revised_documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentInput"
+      },
+      "title": "Revised Documents",
+      "type": "array"
+    },
+    "project_facts": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Project Facts"
+    },
+    "recovery_target_weeks": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recovery Target Weeks"
+    },
+    "library_dir": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Library Dir"
+    },
+    "offered_model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Offered Model"
+    },
+    "equipment_type": {
+      "anyOf": [
+        {
+          "enum": [
+            "transformer",
+            "generator",
+            "switchgear"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Equipment Type"
+    }
+  },
+  "title": "CaseInput",
+  "type": "object"
+}

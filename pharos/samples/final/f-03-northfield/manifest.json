@@ -1,0 +1,28 @@
+{
+  "id": "f-03-northfield",
+  "set": "final",
+  "title": "Northfield: weights in ambiguous tons, BTU/h heat, per-unit impedance",
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    },
+    {
+      "role": "logistics",
+      "path": "logistics.pdf"
+    },
+    {
+      "role": "schedule",
+      "path": "schedule.json"
+    }
+  ],
+  "recovery_target_weeks": 6
+}

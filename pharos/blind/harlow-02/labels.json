@@ -1,0 +1,23 @@
+{
+  "id": "harlow-02",
+  "package": "harlow",
+  "kind": "find_alternatives",
+  "notes": "Impedance has no tolerance so exact 7.5: RW-5000 (7.2) falls short; RW-5000Z blank -> needs confirmation. QL-6300 (6,300 kVA >= min, 37.9<=38) supported. QL-5000H loss 39>38; SB-4000 kVA; SB-5000D winding; TR-5000 66 kV. Original excluded.",
+  "expected": {
+    "supported": [
+      "QL-5000",
+      "QL-6300"
+    ],
+    "falls_short": [
+      "QL-5000H",
+      "RW-5000",
+      "SB-4000",
+      "SB-5000D",
+      "TR-5000"
+    ],
+    "needs_confirmation": [
+      "RW-5000Z"
+    ],
+    "none_supported": false
+  }
+}

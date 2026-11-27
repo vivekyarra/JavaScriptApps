@@ -1,0 +1,11 @@
+SUBMITTAL DATA - Brandt Transformer Works (fictional)
+Type: BTW-2500-MV
+
+Rated power: 2,500 kVA
+Primary voltage: 34.5 kV
+Secondary voltage: 4,160 V
+Impedance: 6.0 %
+Winding connection: Delta - Delta
+No-load loss: 4.2 kW
+Load loss: 14.1 kW
+Total weight: 8,900 kg

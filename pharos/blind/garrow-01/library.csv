@@ -1,0 +1,11 @@
+manufacturer,model,rated_kva,primary_voltage_v,secondary_voltage_v,impedance_pct,winding_config,heat_loss_kw,lead_time_weeks
+Garrow Power,GAR-2000-X,2000,13800,480,5.75,delta-wye,18.5,70
+Tallis Electric,TE-2000-A,2000,13800,480,5.9,delta-wye,19.2,40
+Tallis Electric,TE-2500-A,2500,13800,480,5.8,delta-wye,22.1,45
+Brookfield,BF-1600,1600,13800,480,5.75,delta-wye,15.0,30
+Brookfield,BF-2000-W,2000,13800,480,5.75,wye-wye,18.0,32
+Orlin,OR-2250,2250,13800,480,6.4,delta-wye,19.0,44
+Orlin,OR-2000-D,2000,13800,480,5.5,delta-wye,,36
+Meridian,MD-2000,2000,13800,480,,delta-wye,17.8,38
+Meridian,MD-2500S,2500,13800,480,6.0,delta-wye,19.9,50
+Tallis Electric,TE-2000-B,2000,13200,480,5.75,delta-wye,18.0,28

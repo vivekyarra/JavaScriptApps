@@ -1,0 +1,10 @@
+manufacturer,model,rated_kva,primary_voltage_v,secondary_voltage_v,impedance_pct,winding_config,heat_loss_kw,lead_time_weeks
+Garrow Power,GAR-1500-STD,1500,12470,480,6.0,delta-wye,12.8,66
+Novak Grid,NV-1500-A,1500,12470,480,5.8,delta-wye,12.5,34
+Novak Grid,NV-1500-B,1500,12470,480,6.8,delta-wye,12.0,34
+Novak Grid,NV-2000,2000,12470,480,6.0,delta-wye,12.5,36
+Kerrow,KR-1500,1500,12470,480,6.0,delta-wye,13.0,30
+Kerrow,KR-1500E,1500,12470,480,6.2,delta-wye,13.4,30
+Lumen,LM-1500,1500,12470,,6.0,delta-wye,12.0,29
+Lumen,LM-1500D,1500,12470,480,6.0,,12.5,29
+Praxis,PX-1500,1500,13800,480,6.0,delta-wye,11.0,31

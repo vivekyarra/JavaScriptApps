@@ -1,0 +1,11 @@
+{
+  "id": "fenwick-03",
+  "package": "fenwick",
+  "kind": "decide",
+  "notes": "Route ready week 40 < lead 60 so it does not gate; condition is the route being adopted. Remediation weeks assumed run in parallel/included in route ready_week.",
+  "expected": {
+    "answer": "only_if",
+    "max_recoverable_weeks": 36,
+    "reason": "Alternate heaviest piece 5,200 kg exceeds 4,000 kg lift; reachable only if the crane route (ready week 40) is used. Baseline milestone 110; alternate ready max(60,40)=60 (switchgear 50) -> milestone 74; recovered 36 >= 30."
+  }
+}

@@ -1,0 +1,9 @@
+SECTION 26 12 00 - LARGE TRANSFORMER (synthetic test document)
+Project: Garrow Port Electrification
+
+Rated power: 3,000 kVA (exact)
+Primary voltage: 34,500 V
+Secondary voltage: 4,160 V
+Impedance: 6.5 % (tolerance +/-7.5 %)
+Winding connection: delta-wye
+Total losses: maximum 24 kW

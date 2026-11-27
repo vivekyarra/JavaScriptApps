@@ -1,0 +1,40 @@
+{
+  "id": "m-02-meridian",
+  "set": "milestone",
+  "title": "Meridian plant: transformer T1 alternate (scanned weights page, no %Z)",
+  "recovery_target_weeks": 20,
+  "documents": [
+    {
+      "role": "spec",
+      "path": "spec.pdf"
+    },
+    {
+      "role": "original",
+      "path": "original.pdf"
+    },
+    {
+      "role": "alternate",
+      "path": "alternate.pdf"
+    },
+    {
+      "role": "logistics",
+      "path": "logistics.pdf"
+    },
+    {
+      "role": "schedule",
+      "path": "schedule.json"
+    }
+  ],
+  "revisions": [
+    {
+      "label": "3",
+      "documents": [
+        {
+          "role": "alternate",
+          "path": "alternate_rev3.pdf",
+          "revision": "3"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+[
+  {
+    "id": "ardent-01",
+    "package": "ardent",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "ardent-02",
+    "package": "ardent",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "ardent-03",
+    "package": "ardent",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "bellwether-01",
+    "package": "bellwether",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "bellwether-02",
+    "package": "bellwether",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "corvane-01",
+    "package": "corvane",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "corvane-02",
+    "package": "corvane",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "dunmore-01",
+    "package": "dunmore",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "dunmore-02",
+    "package": "dunmore",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "eskerhal-01",
+    "package": "eskerhal",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "eskerhal-02",
+    "package": "eskerhal",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "eskerhal-03",
+    "package": "eskerhal",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "eskerhal-04",
+    "package": "eskerhal",
+    "kind": "check_submittal"
+  },
+  {
+    "id": "fenwick-01",
+    "package": "fenwick",
+    "kind": "decide"
+  },
+  {
+    "id": "fenwick-02",
+    "package": "fenwick",
+    "kind": "decide"
+  },
+  {
+    "id": "fenwick-03",
+    "package": "fenwick",
+    "kind": "decide"
+  },
+  {
+    "id": "fenwick-04",
+    "package": "fenwick",
+    "kind": "decide"
+  },
+  {
+    "id": "garrow-01",
+    "package": "garrow",
+    "kind": "find_alternatives"
+  },
+  {
+    "id": "garrow-02",
+    "package": "garrow",
+    "kind": "find_alternatives"
+  },
+  {
+    "id": "garrow-03",
+    "package": "garrow",
+    "kind": "find_alternatives"
+  },
+  {
+    "id": "harlow-01",
+    "package": "harlow",
+    "kind": "find_alternatives"
+  },
+  {
+    "id": "harlow-02",
+    "package": "harlow",
+    "kind": "find_alternatives"
+  },
+  {
+    "id": "ivor-01",
+    "package": "ivor",
+    "kind": "find_alternatives"
+  },
+  {
+    "id": "kestrel-01",
+    "package": "kestrel",
+    "kind": "decide"
+  },
+  {
+    "id": "kestrel-02",
+    "package": "kestrel",
+    "kind": "decide"
+  },
+  {
+    "id": "kestrel-03",
+    "package": "kestrel",
+    "kind": "decide"
+  },
+  {
+    "id": "kestrel-04",
+    "package": "kestrel",
+    "kind": "decide"
+  }
+]

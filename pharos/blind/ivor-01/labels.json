@@ -1,0 +1,20 @@
+{
+  "id": "ivor-01",
+  "package": "ivor",
+  "kind": "find_alternatives",
+  "notes": "Library is datasheet files (datasheet-1..6, txt and pdf). IV-1500 total loss = 2.2+8.0=10.2>9.5 short (must sum); IV-750 below min; IV-1250 480Y/277 secondary; IV-1000M states no losses -> needs confirmation (12.47 kV=12,470 V). NB-1000-OEM is the original, excluded. Z 5.8 in band 5.319..6.181.",
+  "expected": {
+    "supported": [
+      "IV-1000"
+    ],
+    "falls_short": [
+      "IV-1500",
+      "IV-750",
+      "IV-1250"
+    ],
+    "needs_confirmation": [
+      "IV-1000M"
+    ],
+    "none_supported": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "milestone": {
+    "name": "Substation commissioning",
+    "install_test_weeks": 10
+  },
+  "order_release_week": 0,
+  "submittal_approval_weeks": 0,
+  "substituted_item": "T1",
+  "substituted_item_label": "transformer",
+  "items": [
+    {
+      "id": "T1",
+      "name": "Unit substation transformer T1",
+      "baseline_arrival_week": 70,
+      "requires": true
+    },
+    {
+      "id": "SG",
+      "name": "Low-voltage switchgear",
+      "vendor": "Switchgear vendor",
+      "arrival_week": 30,
+      "requires": true
+    },
+    {
+      "id": "BD",
+      "name": "Bus duct",
+      "arrival_week": 45,
+      "requires": true
+    }
+  ],
+  "alternate_routes": [],
+  "remediation": []
+}

@@ -1,0 +1,16 @@
+{
+  "id": "ardent-02",
+  "package": "ardent",
+  "kind": "check_submittal",
+  "notes": "Quoted minimum/maximum wording. 'minimum 2,000' -> 2,500 complies. 34.5 kV = 34,500 V. Impedance has no tolerance, so exact: 6.0 != 6.5 deviates. Delta-delta vs delta-wye deviates. Losses must be summed 4.2+14.1=18.3 > 18.0 deviates. Submittal weight is not labelled (spec silent).",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "deviates",
+      "winding_config": "deviates",
+      "heat_loss_kw": "deviates"
+    }
+  }
+}

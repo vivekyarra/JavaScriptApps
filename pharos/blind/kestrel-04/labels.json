@@ -1,0 +1,11 @@
+{
+  "id": "kestrel-04",
+  "package": "kestrel",
+  "kind": "decide",
+  "notes": "Without the route recovery would be 48; route gates at week 36 -> 42. Assumes route ready_week is the week the item can be delivered into the building and remediation weeks are inside that date.",
+  "expected": {
+    "answer": "only_if",
+    "max_recoverable_weeks": 42,
+    "reason": "Alternate heaviest piece 9,900 lb exceeds 8,000 lb elevator; requires crane route, ready week 36, which is later than lead time 30 (210 days) so alternate ready = 36. Baseline milestone 88; alternate milestone max(36,30)+10 = 46; recovered 42 >= 30."
+  }
+}

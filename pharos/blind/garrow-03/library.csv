@@ -1,0 +1,7 @@
+manufacturer,model,rated_kva,primary_voltage_v,secondary_voltage_v,impedance_pct,winding_config,heat_loss_kw,lead_time_weeks
+Tallis Electric,TE-3000-A,3000,34500,4160,6.5,delta-wye,27.0,52
+Brookfield,BF-3000-W,3000,34500,4160,6.5,wye-wye,23.0,48
+Orlin,OR-2500,2500,34500,4160,6.5,delta-wye,20.0,40
+Orlin,OR-3750,3750,34500,4160,6.4,delta-wye,22.0,50
+Meridian,MD-3000-Z,3000,34500,4160,7.5,delta-wye,23.5,45
+Meridian,MD-3000-V,3000,33000,4160,6.5,delta-wye,23.0,45

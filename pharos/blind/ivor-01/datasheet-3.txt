@@ -1,0 +1,7 @@
+DATASHEET - Ivor Transformers IV-750 (fictional)
+Rating: 750 kVA
+High voltage: 12,470 V
+Low voltage: 208Y/120 V
+Impedance: 5.75 %
+Connection: Dyn11
+Total losses: 7.2 kW

@@ -1,0 +1,179 @@
+{
+  "set": "final",
+  "fields": {
+    "spec": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2500
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 13800
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "not_stated"
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "not_stated"
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "not_stated"
+      },
+      "heat_loss_kw": {
+        "status": "not_stated"
+      },
+      "lead_time_weeks": {
+        "status": "not_stated"
+      },
+      "lead_time_start": {
+        "status": "not_stated"
+      }
+    },
+    "original": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2500
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 13800
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 480
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          1500,
+          2100,
+          2200
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 3900
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 7600
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 14.5
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 82
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "order"
+      }
+    },
+    "alternate": {
+      "rated_kva": {
+        "status": "documented",
+        "value": 2000
+      },
+      "primary_voltage_v": {
+        "status": "documented",
+        "value": 13800
+      },
+      "secondary_voltage_v": {
+        "status": "documented",
+        "value": 208
+      },
+      "impedance_pct": {
+        "status": "documented",
+        "value": 5.75
+      },
+      "xd_subtransient_pct": {
+        "status": "not_stated"
+      },
+      "winding_config": {
+        "status": "documented",
+        "value": "delta-wye"
+      },
+      "dimensions_mm": {
+        "status": "documented",
+        "value": [
+          1400,
+          2050,
+          2100
+        ]
+      },
+      "heaviest_transport_weight_kg": {
+        "status": "documented",
+        "value": 3650
+      },
+      "shipping_total_weight_kg": {
+        "status": "not_stated"
+      },
+      "total_weight_kg": {
+        "status": "documented",
+        "value": 6900
+      },
+      "heat_loss_kw": {
+        "status": "documented",
+        "value": 13.8
+      },
+      "lead_time_weeks": {
+        "status": "documented",
+        "value": 26.0
+      },
+      "lead_time_start": {
+        "status": "documented",
+        "value": "order"
+      }
+    }
+  },
+  "findings": {
+    "weight:elevator": "not_stated",
+    "weight:slab": "cleared",
+    "dims:door": "conclusive",
+    "heat:cooling": "cleared",
+    "spec:kva": "conclusive",
+    "spec:secondary_voltage": "conclusive"
+  },
+  "decision": {
+    "answer": "only_if",
+    "baseline_week": 82,
+    "max_recoverable_weeks": 12,
+    "weeks_earlier_alternate_ships": 56,
+    "controlling_item_alternate": "Main switchgear",
+    "requirements": []
+  }
+}

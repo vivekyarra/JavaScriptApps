@@ -1,0 +1,11 @@
+{
+  "id": "fenwick-04",
+  "package": "fenwick",
+  "kind": "decide",
+  "notes": "SG item has no arrival_week key. Transformer data complete (baseline 84, alt 36).",
+  "expected": {
+    "answer": "needs_data",
+    "max_recoverable_weeks": null,
+    "reason": "Switchgear arrival week is not provided in the schedule, so the milestone cannot be computed."
+  }
+}

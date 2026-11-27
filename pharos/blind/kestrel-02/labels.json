@@ -1,0 +1,11 @@
+{
+  "id": "kestrel-02",
+  "package": "kestrel",
+  "kind": "decide",
+  "notes": "Substitute's own ceiling is below target -> no (not 'not alone').",
+  "expected": {
+    "answer": "no",
+    "max_recoverable_weeks": 12,
+    "reason": "Baseline milestone max(70,30,45)+10 = 80. Alternate ready 58: milestone max(58,30,45)+10 = 68. Recovered 12 < 24; even with all other items at week 0 the substitute could recover only 70-58 = 12."
+  }
+}

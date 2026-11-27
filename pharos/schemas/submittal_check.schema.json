@@ -1,0 +1,273 @@
+{
+  "$defs": {
+    "DocumentRef": {
+      "properties": {
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "pages": {
+          "title": "Pages",
+          "type": "integer"
+        },
+        "unreadable_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Unreadable Pages",
+          "type": "array"
+        },
+        "kind": {
+          "default": "pdf",
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "name",
+        "sha256",
+        "pages"
+      ],
+      "title": "DocumentRef",
+      "type": "object"
+    },
+    "Evidence": {
+      "description": "A resolvable pointer to the exact place a value came from.",
+      "properties": {
+        "document": {
+          "title": "Document",
+          "type": "string"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Revision"
+        },
+        "sha256": {
+          "title": "Sha256",
+          "type": "string"
+        },
+        "page": {
+          "title": "Page",
+          "type": "integer"
+        },
+        "quote": {
+          "title": "Quote",
+          "type": "string"
+        },
+        "verified": {
+          "default": true,
+          "title": "Verified",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "document",
+        "role",
+        "sha256",
+        "page",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "RequirementCheck": {
+      "description": "One buyer requirement against what the supplier's submittal establishes, with both sides cited.",
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "requirement": {
+          "default": null,
+          "title": "Requirement"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "basis": {
+          "title": "Basis",
+          "type": "string"
+        },
+        "submittal_value": {
+          "default": null,
+          "title": "Submittal Value"
+        },
+        "verdict": {
+          "enum": [
+            "complies",
+            "deviates",
+            "missing",
+            "unreadable",
+            "conflicting"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "requirement_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Requirement Evidence",
+          "type": "array"
+        },
+        "submittal_evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Submittal Evidence",
+          "type": "array"
+        },
+        "searched": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Searched"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "field",
+        "label",
+        "basis",
+        "verdict"
+      ],
+      "title": "RequirementCheck",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Case Id"
+    },
+    "equipment_type": {
+      "title": "Equipment Type",
+      "type": "string"
+    },
+    "offered_model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Offered Model"
+    },
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/DocumentRef"
+      },
+      "title": "Documents",
+      "type": "array"
+    },
+    "requirements": {
+      "items": {
+        "$ref": "#/$defs/RequirementCheck"
+      },
+      "title": "Requirements",
+      "type": "array"
+    },
+    "counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Counts",
+      "type": "object"
+    },
+    "table_warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Table Warnings",
+      "type": "array"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "equipment_type",
+    "documents",
+    "requirements",
+    "counts",
+    "summary"
+  ],
+  "title": "SubmittalCheck",
+  "type": "object"
+}

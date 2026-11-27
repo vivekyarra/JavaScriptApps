@@ -1,0 +1,16 @@
+{
+  "id": "eskerhal-04",
+  "package": "eskerhal",
+  "kind": "check_submittal",
+  "notes": "Page 1 readable: 1.600 complies, 20.000 complies, 420 V vs 400 deviates. Page 2 is a degraded image-only scan with no text layer and not legible; impedance, winding and losses appear only there -> unreadable.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "deviates",
+      "impedance_pct": "unreadable",
+      "winding_config": "unreadable",
+      "heat_loss_kw": "unreadable"
+    }
+  }
+}

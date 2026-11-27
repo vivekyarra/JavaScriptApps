@@ -1,0 +1,11 @@
+manufacturer,model,rated_kva,primary_voltage_v,secondary_voltage_v,impedance_pct,winding_config,heat_loss_kw,lead_time_weeks
+Harlow,HAR-1000-O,1000,20000,400,6.0,delta-wye,10.5,60
+Voss,VS-1000,1000,20000,400,6.0,delta-wye,10.8,26
+Voss,VS-1250,1250,20000,400,5.5,delta-wye,10.9,28
+Voss,VS-800,800,20000,400,6.0,delta-wye,8.5,22
+Calder,CD-1000,1000,20000,420,6.0,delta-wye,10.0,30
+Calder,CD-1000L,1000,20000,400,6.0,delta-wye,11.5,30
+Isen,IS-1600,1600,20000,400,5.2,delta-wye,10.9,35
+Isen,IS-1000X,1000,20000,400,6.5,delta-wye,,33
+Noble,NB-1000,1000,20000,400,6.0,delta-delta,10.0,27
+Noble,NB-1000S,1000,,400,6.0,delta-wye,10.5,27

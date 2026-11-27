@@ -1,0 +1,11 @@
+{
+  "id": "kestrel-03",
+  "package": "kestrel",
+  "kind": "decide",
+  "notes": "max_recoverable 40 is with expedite; as-scheduled recovery is 20. UNSURE: expedite is encoded as extra item keys expedite_arrival_week (my invention) and stated in logistics.pdf text.",
+  "expected": {
+    "answer": "only_if",
+    "max_recoverable_weeks": 40,
+    "reason": "Baseline milestone max(100,80)+12 = 112. As scheduled: alternate 45, switchgear 80 binds -> milestone 92, recovered 20 < 30. If switchgear is expedited to week 60: milestone max(45,60)+12 = 72, recovered 40 >= 30. So reachable only if switchgear arrives by week 60."
+  }
+}

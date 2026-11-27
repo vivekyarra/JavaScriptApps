@@ -1,0 +1,11 @@
+{
+  "id": "fenwick-01",
+  "package": "fenwick",
+  "kind": "decide",
+  "notes": "Lead time 364 days = 52 weeks. Switchgear (60) becomes binding but 30>=20. Heaviest 3,200 kg within 4,000 kg lift. Approval/release weeks 0.",
+  "expected": {
+    "answer": "yes",
+    "max_recoverable_weeks": 30,
+    "reason": "Baseline milestone = max(90,60)+10 = week 100. Alternate T1 ready week 52 (364 days), switchgear week 60 binds: milestone 70. Recovered 30 >= 20 with nothing else needed; alternate fits lift."
+  }
+}

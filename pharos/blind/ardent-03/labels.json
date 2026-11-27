@@ -1,0 +1,18 @@
+{
+  "id": "ardent-03",
+  "package": "ardent",
+  "kind": "check_submittal",
+  "notes": "Submittal silent on impedance, winding, heaviest transport weight -> missing. Frequency 50 vs 60 deviates. Weight 3,300<=3,400 complies.",
+  "expected": {
+    "verdicts": {
+      "rated_kva": "complies",
+      "primary_voltage_v": "complies",
+      "secondary_voltage_v": "complies",
+      "impedance_pct": "missing",
+      "winding_config": "missing",
+      "total_weight_kg": "complies",
+      "heaviest_transport_weight_kg": "missing",
+      "frequency_hz": "deviates"
+    }
+  }
+}
